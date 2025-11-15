@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vend+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+    <title>BetaMac</title>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo"><a href="{% url 'index' %}">BetaMac</a></div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="{% url '#' %}">About</a></li>
+                {% if user.is_authenticated %}
+                <!-- not sure yet -->
+                {% else %}
+                <li><a href="{% url '#' %}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
