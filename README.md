@@ -1,0 +1,2 @@
+# betamac
+a better zetamac
