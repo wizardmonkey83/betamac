@@ -16,12 +16,7 @@
         <div class="logo"><a href="{% url 'index' %}">BetaMac</a></div>
         <nav class="main-nav">
             <ul>
-                {% if user.is_authenticated %}
-                <li><a href="">Characters</a></li>
-                <!-- not sure yet -->
-                {% else %}
                 <li><a href="">How to Play</a></li>
-                {% endif %}
             </ul>
         </nav>
     </header>
@@ -116,7 +111,7 @@
                 <div id="duration-container" class="duration-container">
                     <div class="left-side index">
                         <label class="label duration">Duration: </label> 
-                        <select name="durations" id="durations" class="duration-selector">
+                        <select name="durations" id="duration-selector" class="duration-selector">
                             <option value="30">30 seconds</option>
                             <option value="60">60 seconds</option>
                             <option selected value="120">120 seconds</option>
@@ -125,6 +120,7 @@
                         </select>
                     </div>
                     {% csrf_token %}
+                    <input type="hidden" name="duration_selector" id="duration_selector"/>
                     <button type="submit" id="start-game-button" class="submit-btn">Start</button>
                 </div>
             </form>
@@ -136,7 +132,15 @@
             </div>
 
     </main>
-
+    <script>
+        // changes duration ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const durationSelector = document.getElementById("duration-selector");
+        durationSelector.onchange = function changeDuration() {
+            const hiddenDuration = document.getElementById("duration_selector");
+            const selectedOption = durationSelector.options[durationSelector.selectedIndex];
+            hiddenDuration.value = selectedOption;
+        }
+    </script>
 
 
 </body>

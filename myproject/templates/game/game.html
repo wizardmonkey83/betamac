@@ -1,1 +1,114 @@
-<p>start game</p>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Notch:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Workbench&display=swap" rel="stylesheet">
+    <title>BetaMac</title>
+</head>
+<body>
+    <header class="main-header game">
+        <div class="logo">Seconds Left: </div>
+        <div class="logo" id="countdown">{{ duration }}</div>
+        <nav class="main-nav">
+            <ul>
+                <li>Score:</li>
+                <li id="score">0</li>
+            </ul>
+        </nav>
+    </header>
+    <main class="game-container">
+
+        <div class="game-banner">
+            <h1 class="header game" id="equation-box"></h1>
+            <input class="user-input game" type="number" id="user-input-game">
+        </div>
+    </main>
+
+    <script>
+        // countdown timer -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        let countdownTime = "{{ duration }}";
+        const countdownDisplay = document.getElementById("countdown");
+        const updateCountdown = () => {
+            if (countdownTime >= 0) {
+                countdownDisplay.textContent = countdownTime;
+                countdownTime--;
+            }  else {
+                // window.location.href = "results.html";
+            }
+        }; 
+        const countdownInterval = setInterval(updateCountdown, 1000);
+
+        // generate problems -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        let addition_left_min = "{{ addition_left_min }}";
+        let addition_left_max = "{{ addition_left_max }}";
+        let addition_right_min = "{{ addition_right_min }}";
+        let addition_right_max = "{{ addition_right_max }}";
+
+        let multiplication_left_min = "{{ multiplication_left_min }}";
+        let multiplication_left_max = "{{ multiplication_left_max }}";
+        let multiplication_right_min = "{{ multiplication_right_min }}";
+        let multiplication_right_max = "{{ multiplication_right_max }}";
+
+        function getRandomAdditionInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getRandomMultiplicationInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        let addition_num1 = getRandomAdditionInt(addition_left_min, addition_left_max);
+        let addition_num2 = getRandomAdditionInt(addition_right_min, addition_right_max);
+
+        let multiplication_num1 = getRandomAdditionInt(multiplication_left_min, multiplication_left_max);
+        let multiplication_num2 = getRandomAdditionInt(multiplication_right_min, multiplication_right_max);
+
+        let operations = ['+', '-', '*', '/'];
+        let operation = operations[Math.floor(Math.random() * operations.length)];
+
+        let problem;
+        let answer;
+        switch (operation) {
+            case '+':
+                problem = `${addition_num1} + ${addition_num2} =`;
+                answer = addition_num1 + addition_num2;
+                break;
+            case '-':
+                problem = `${addition_num1} - ${addition_num2} =`;
+                answer = addition_num1 - addition_num2;
+                break;
+            case '*':
+                problem = `${multiplication_num1} x ${multiplication_num2} =`;
+                answer = multiplication_num1 * multiplication_num2;
+                break;
+            case '/':
+                problem = `${multiplication_num1} / ${multiplication_num2} =`;
+                answer = multiplication_num1 / multiplication_num2;
+                break;
+        }
+
+        const equationBox = document.getElementById("equation-box");
+        // remember you can only use .value on inputs
+        equationBox.innerHTML = problem;
+
+        // check answer ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const inputBox = document.getElementById("user-input-game");
+        const score = 0;
+        if (inputBox.value == answer) {
+            const scoreHeader = document.getElementById("score");
+            score += 1;
+            scoreHeader.innerHTML = "";
+            scoreHeader.innerHTML = `${score}`;
+
+            // need to call a function to generate problems
+        }
+    </script>
+
+</body>
+</html>
