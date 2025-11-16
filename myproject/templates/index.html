@@ -45,8 +45,7 @@
 
         <!-- when the user boots up the'll see this. -->
         <div id="solo-mode">
-            <form method="POST" action="enter a url here" class="arithmetic-type-container">
-
+            <form method="POST" action="{% url 'pass_range_parameters' %}" class="arithmetic-type-container">
                 <div class="header-container arithmetic-type">
                     <label class="label duration">Addition</label>
                     <label class="switch">
@@ -57,13 +56,13 @@
                 <div class="range-container">
                     <p class="description-text range">
                         Range: (
-                        <input type="number" value="2" name="addition_left_min" id="addition_left_min" class="range-input"> 
+                        {{ form.addition_left_min }}
                         to 
-                        <input type="number" value="100" name="addition_left_max" id="addition_left_max" class="range-input"> 
+                        {{ form.addition_left_max }}
                         ) + (
-                        <input type="number" value="2" name="addition_right_min" id="addition_right_min" class="range-input"> 
+                        {{ form.addition_right_min }} 
                         to 
-                        <input type="number" value="100" name="addition_right_max" id="addition_right_max" class="range-input">
+                        {{ form.addition_right_max }}
                         )
                     </p>
                 </div>
@@ -91,13 +90,13 @@
                 <div class="range-container">
                     <p class="description-text range">
                         Range: (
-                        <input type="number" value="2" name="multiplication_left_min" id="multiplication_left_min" class="range-input"> 
+                        {{ form.multiplication_left_min }} 
                         to 
-                        <input type="number" value="12" name="multiplication_left_max" id="multiplication_left_max" class="range-input"> 
+                        {{ form.multiplication_left_max }} 
                         ) + (
-                        <input type="number" value="2" name="multiplication_right_min" id="multiplication_right_min" class="range-input"> 
+                        {{ form.multiplication_right_min }}  
                         to 
-                        <input type="number" value="100" name="multiplication_right_max" id="multiplication_right_max" class="range-input">
+                        {{ form.multiplication_right_max }} 
                         )
                     </p>
                 </div>
@@ -125,7 +124,8 @@
                             <option value="600">600 seconds</option>
                         </select>
                     </div>
-                    <button type="submit" class="submit-btn">Start</button>
+                    {% csrf_token %}
+                    <button type="submit" id="start-game-button" class="submit-btn">Start</button>
                 </div>
             </form>
         </div>
@@ -136,6 +136,8 @@
             </div>
 
     </main>
+
+
 
 </body>
 </html>

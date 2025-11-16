@@ -21,4 +21,6 @@ from users.views import load_index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", load_index, name="index"),
+    path("", include("game.urls")),
+    path("", include("users.urls")),
 ]
