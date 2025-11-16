@@ -15,21 +15,8 @@ def pass_range_parameters(request):
             multiplication_left_max = form.cleaned_data["multiplication_left_max"]
             multiplication_right_min = form.cleaned_data["multiplication_right_min"]
             multiplication_right_max = form.cleaned_data["multiplication_right_max"]
-            
-            # testing
-            print(addition_left_min)
-            print(addition_left_max)
-            print(addition_right_min)
-            print(addition_right_max)
-            print("================================")
-            print("================================")
-            print("================================")
-            print(multiplication_left_min)
-            print(multiplication_left_max)
-            print(multiplication_right_min)
-            print(multiplication_right_max)
 
-            # duration = form.cleaned_data["duration_selector"]
+            duration_selector = form.cleaned_data["duration_selector"]
 
             context = {
                 "addition_left_min": addition_left_min,
@@ -42,10 +29,10 @@ def pass_range_parameters(request):
                 "multiplication_right_min": multiplication_right_min,
                 "multiplication_right_max": multiplication_right_max,
 
-                # "duration": duration,
+                "duration": duration_selector,
             }
 
-            return render(request, "game/game.html", {"context": context})
+            return render(request, "game/game.html", context)
     else:
         form = PassRangeParameters()
     return render(request, "index.html", {"form": form})

@@ -114,13 +114,13 @@
                         <select name="durations" id="duration-selector" class="duration-selector">
                             <option value="30">30 seconds</option>
                             <option value="60">60 seconds</option>
-                            <option selected value="120">120 seconds</option>
+                            <option selected="selected" value="120">120 seconds</option>
                             <option value="300">300 seconds</option>
                             <option value="600">600 seconds</option>
                         </select>
                     </div>
                     {% csrf_token %}
-                    <input type="hidden" name="duration_selector" id="duration_selector"/>
+                    <input type="hidden" name="duration_selector" id="duration_selector" value="120"/>
                     <button type="submit" id="start-game-button" class="submit-btn">Start</button>
                 </div>
             </form>
@@ -132,13 +132,17 @@
             </div>
 
     </main>
+
+    <footer>
+        <div class="logo footer"><a href="{% url 'index' %}">Coming Soon</a></div>
+    </footer>
     <script>
         // changes duration ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const durationSelector = document.getElementById("duration-selector");
         durationSelector.onchange = function changeDuration() {
             const hiddenDuration = document.getElementById("duration_selector");
             const selectedOption = durationSelector.options[durationSelector.selectedIndex];
-            hiddenDuration.value = selectedOption;
+            hiddenDuration.value = selectedOption.value;
         }
     </script>
 

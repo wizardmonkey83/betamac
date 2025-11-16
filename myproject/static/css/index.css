@@ -52,6 +52,33 @@ a {
     overflow: hidden;
 }
 
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+    padding: 0.75rem 2rem;
+    background-color: #EFEFEF;
+}
+
+.logo.footer {
+    font-size: 1rem;
+    color: #cf9905;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    font-family: "Workbench", sans-serif;
+}
+
+.logo.footer:hover {
+    color: #977005;
+}
+
+
+
+
+
 .index-container {
     display: flex;
     flex-direction: column;

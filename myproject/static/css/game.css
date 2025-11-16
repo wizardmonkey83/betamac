@@ -23,11 +23,35 @@ a {
     background-color: #EFEFEF;
 }
 
-.logo {
+.header-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.logo.game {
     font-size: 1.25rem;
     font-weight: 400;
     color: #cf9905;
     font-family: "Workbench", sans-serif;
+    display: flex;
+    flex-direction: row;
+}
+
+.logo.countdown {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #cf9905;
+    font-family: "Workbench", sans-serif;
+    margin-left: 1rem;
+}
+
+.score-container.game {
+    display: flex;
+    flex-direction: row;
+}
+
+.score-value {
+    margin-left: 1rem;
 }
 
 .main-nav ul {
@@ -61,6 +85,7 @@ a {
     margin-right: 1rem;
     margin-top: .1rem;
     margin-bottom: .1rem;
+    font-family: "DM Sans", sans-serif;
 }
 
 .game-container {
@@ -84,7 +109,7 @@ a {
 .user-input.game {
     border-radius: 5px;
     font-size: 2.25rem;
-    font-family: inherit;
+    font-family: "DM Sans", sans-serif;
     font-weight: 100;
     max-width: 200px;
 }

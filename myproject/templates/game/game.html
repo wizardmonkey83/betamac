@@ -13,12 +13,15 @@
 </head>
 <body>
     <header class="main-header game">
-        <div class="logo">Seconds Left: </div>
-        <div class="logo" id="countdown">{{ duration }}</div>
+        <div class="header-container game">
+            <div class="logo game">Seconds Left:<div class="logo countdown" id="countdown">{{ duration }}</div></div>
+        </div>
         <nav class="main-nav">
             <ul>
-                <li>Score:</li>
-                <li id="score">0</li>
+                <div class="score-container game">
+                    <li>Score:</li>
+                    <li class="score-value" id="score">0</li>
+                </div>
             </ul>
         </nav>
     </header>
@@ -26,7 +29,7 @@
 
         <div class="game-banner">
             <h1 class="header game" id="equation-box"></h1>
-            <input class="user-input game" type="number" id="user-input-game">
+            <input class="user-input game" type="number" onchange="checkSolutionStatus()" id="user-input-game">
         </div>
     </main>
 
@@ -45,69 +48,76 @@
         const countdownInterval = setInterval(updateCountdown, 1000);
 
         // generate problems -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        let addition_left_min = "{{ addition_left_min }}";
-        let addition_left_max = "{{ addition_left_max }}";
-        let addition_right_min = "{{ addition_right_min }}";
-        let addition_right_max = "{{ addition_right_max }}";
+        const addition_left_min = "{{ addition_left_min }}";
+        const addition_left_max = "{{ addition_left_max }}";
+        const addition_right_min = "{{ addition_right_min }}";
+        const addition_right_max = "{{ addition_right_max }}";
 
-        let multiplication_left_min = "{{ multiplication_left_min }}";
-        let multiplication_left_max = "{{ multiplication_left_max }}";
-        let multiplication_right_min = "{{ multiplication_right_min }}";
-        let multiplication_right_max = "{{ multiplication_right_max }}";
-
-        function getRandomAdditionInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        function getRandomMultiplicationInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        let addition_num1 = getRandomAdditionInt(addition_left_min, addition_left_max);
-        let addition_num2 = getRandomAdditionInt(addition_right_min, addition_right_max);
-
-        let multiplication_num1 = getRandomAdditionInt(multiplication_left_min, multiplication_left_max);
-        let multiplication_num2 = getRandomAdditionInt(multiplication_right_min, multiplication_right_max);
-
-        let operations = ['+', '-', '*', '/'];
-        let operation = operations[Math.floor(Math.random() * operations.length)];
-
+        const multiplication_left_min = "{{ multiplication_left_min }}";
+        const multiplication_left_max = "{{ multiplication_left_max }}";
+        const multiplication_right_min = "{{ multiplication_right_min }}";
+        const multiplication_right_max = "{{ multiplication_right_max }}";
+        
         let problem;
         let answer;
-        switch (operation) {
-            case '+':
-                problem = `${addition_num1} + ${addition_num2} =`;
-                answer = addition_num1 + addition_num2;
-                break;
-            case '-':
-                problem = `${addition_num1} - ${addition_num2} =`;
-                answer = addition_num1 - addition_num2;
-                break;
-            case '*':
-                problem = `${multiplication_num1} x ${multiplication_num2} =`;
-                answer = multiplication_num1 * multiplication_num2;
-                break;
-            case '/':
-                problem = `${multiplication_num1} / ${multiplication_num2} =`;
-                answer = multiplication_num1 / multiplication_num2;
-                break;
+        function produceEquation() {
+            function getRandomAdditionInt(min, max) {
+                // Math.random() produces a float value between 0 and 1 (like .7). not super sue what adding min to the end does
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+            
+            let addition_num1 = getRandomAdditionInt(addition_left_min, addition_left_max);
+            let addition_num2 = getRandomAdditionInt(addition_right_min, addition_right_max);
+
+            let multiplication_num1 = getRandomAdditionInt(multiplication_left_min, multiplication_left_max);
+            let multiplication_num2 = getRandomAdditionInt(multiplication_right_min, multiplication_right_max);
+
+            let operations = ['+', '-', '*', '/'];
+            let operation = operations[Math.floor(Math.random() * operations.length)];
+
+            switch (operation) {
+                case '+':
+                    problem = `${addition_num1} + ${addition_num2} =`;
+                    // numbers were being read as strings, not ints. not sure why but parseInt fixes the issue.
+                    answer = parseInt(addition_num1) + parseInt(addition_num2);
+                    break;
+                case '-':
+                    problem = `${addition_num1} - ${addition_num2} =`;
+                    answer = parseInt(addition_num1) - parseInt(addition_num2);
+                    break;
+                case '*':
+                    problem = `${multiplication_num1} x ${multiplication_num2} =`;
+                    answer = multiplication_num1 * multiplication_num2;
+                    break;
+                case '/':
+                    problem = `${multiplication_num1} / ${multiplication_num2} =`;
+                    answer = multiplication_num1 / multiplication_num2;
+                    break;
+            }
+
+            const equationBox = document.getElementById("equation-box");
+            // remember you can only use .value on inputs
+            equationBox.innerHTML = problem;
+            console.log("PROBLEM: " + problem);
+            console.log("ANSWER: " + answer);
         }
-
-        const equationBox = document.getElementById("equation-box");
-        // remember you can only use .value on inputs
-        equationBox.innerHTML = problem;
-
+        
         // check answer ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const inputBox = document.getElementById("user-input-game");
-        const score = 0;
-        if (inputBox.value == answer) {
+        let score = 0;
+        function checkSolutionStatus() {
+            if (inputBox.value == answer) {
             const scoreHeader = document.getElementById("score");
             score += 1;
             scoreHeader.innerHTML = "";
             scoreHeader.innerHTML = `${score}`;
 
             // need to call a function to generate problems
+            inputBox.value = "";
+            produceEquation();
+            }
         }
+        produceEquation();
     </script>
 
 </body>
