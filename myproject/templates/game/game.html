@@ -65,15 +65,15 @@
         }
 
         // generate problems -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        const addition_left_min = "{{ addition_left_min }}";
-        const addition_left_max = "{{ addition_left_max }}";
-        const addition_right_min = "{{ addition_right_min }}";
-        const addition_right_max = "{{ addition_right_max }}";
+        const addition_left_min = parseInt("{{ addition_left_min }}", 10);
+        const addition_left_max = parseInt("{{ addition_left_max }}", 10);
+        const addition_right_min = parseInt("{{ addition_right_min }}", 10);
+        const addition_right_max = parseInt("{{ addition_right_max }}", 10);
 
-        const multiplication_left_min = "{{ multiplication_left_min }}";
-        const multiplication_left_max = "{{ multiplication_left_max }}";
-        const multiplication_right_min = "{{ multiplication_right_min }}";
-        const multiplication_right_max = "{{ multiplication_right_max }}";
+        const multiplication_left_min = parseInt("{{ multiplication_left_min }}", 10);
+        const multiplication_left_max = parseInt("{{ multiplication_left_max }}", 10);
+        const multiplication_right_min = parseInt("{{ multiplication_right_min }}", 10);
+        const multiplication_right_max = parseInt("{{ multiplication_right_max }}", 10);
         
         let problem;
         let answer;
@@ -85,6 +85,8 @@
             
             let addition_num1 = getRandomInt(addition_left_min, addition_left_max);
             let addition_num2 = getRandomInt(addition_right_min, addition_right_max);
+            console.log("ADDITION NUM1: " + addition_num1);
+            console.log("ADDITION NUM2: " + addition_num2);
 
 
             let multiplication_num1 = getRandomInt(multiplication_left_min, multiplication_left_max);
@@ -95,21 +97,21 @@
 
             switch (operation) {
                 case '+':
-                    problem = `${parseInt(addition_num1, 10)} + ${parseInt(addition_num2, 10)} =`;
+                    problem = `${addition_num1} + ${addition_num2} =`;
                     // numbers were being read as strings, not ints. not sure why but parseInt fixes the issue.
-                    answer = parseInt(addition_num1, 10) + parseInt(addition_num2, 10);
+                    answer = addition_num1 + addition_num2;
                     break;
                 case '-':
-                    problem = `${parseInt(addition_num1, 10)} - ${parseInt(addition_num2, 10)} =`;
-                    answer = parseInt(addition_num1, 10) - parseInt(addition_num2, 10);
+                    problem = `${addition_num1} - ${addition_num2} =`;
+                    answer = addition_num1 - addition_num2;
                     break;
                 case '*':
-                    problem = `${parseInt(multiplication_num1, 10)} x ${parseInt(multiplication_num2, 10)} =`;
-                    answer = parseInt(multiplication_num1, 10) * parseInt(multiplication_num2, 10);
+                    problem = `${multiplication_num1} x ${multiplication_num2} =`;
+                    answer = multiplication_num1 * multiplication_num2;
                     break;
                 case '/':
-                    problem = `${parseInt(multiplication_num1, 10)} / ${parseInt(multiplication_num2, 10)} =`;
-                    answer = parseInt(multiplication_num1, 10) / parseInt(multiplication_num2, 10);
+                    problem = `${multiplication_num1} / ${multiplication_num2} =`;
+                    answer = multiplication_num1 / multiplication_num2;
                     break;
             }
 
