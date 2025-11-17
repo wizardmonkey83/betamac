@@ -85,8 +85,6 @@
             
             let addition_num1 = getRandomInt(addition_left_min, addition_left_max);
             let addition_num2 = getRandomInt(addition_right_min, addition_right_max);
-            console.log("ADDITION NUM1: " + addition_num1);
-            console.log("ADDITION NUM2: " + addition_num2);
 
 
             let multiplication_num1 = getRandomInt(multiplication_left_min, multiplication_left_max);
@@ -110,8 +108,10 @@
                     answer = multiplication_num1 * multiplication_num2;
                     break;
                 case '/':
-                    problem = `${multiplication_num1} / ${multiplication_num2} =`;
-                    answer = multiplication_num1 / multiplication_num2;
+                    answer = getRandomInt(multiplication_right_min, multiplication_right_max);
+                    let num2 = getRandomInt(multiplication_left_min, multiplication_left_max);
+                    let num1 = answer * num2;
+                    problem = `${num1} / ${num2} =`;
                     break;
             }
 
