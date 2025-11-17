@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="stylesheet" href="{% static 'css/game.css' %}">
+    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+    <link rel="icon" type="image/x-icon" href="/static/icons/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Notch:wght@200..700&display=swap" rel="stylesheet">
@@ -14,8 +16,11 @@
 <body>
     <header class="main-header game">
         <div class="header-container game">
-            <div class="logo game">Seconds Left:<div class="logo countdown" id="countdown">{{ duration }}</div></div>
-        </div>
+            <form>
+                <div class="logo game">Seconds Left:<div hx-get="{% url 'show_game_results' %}" hx-trigger="click" hx-target="#game-banner" hx-replace="innerHTML" class="logo countdown" id="countdown">{{ duration }}</div></div>
+                {% csrf_token %}
+            </form>
+            </div>
         <nav class="main-nav">
             <ul>
                 <div class="score-container game">
@@ -27,25 +32,36 @@
     </header>
     <main class="game-container">
 
-        <div class="game-banner">
+        <div id="game-banner" class="game-banner">
             <h1 class="header game" id="equation-box"></h1>
             <input class="user-input game" type="number" onchange="checkSolutionStatus()" id="user-input-game">
         </div>
     </main>
 
     <script>
-        // countdown timer -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        let countdownTime = "{{ duration }}";
+        // replace after countdown ends -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        let countdownRunStatus = true;
         const countdownDisplay = document.getElementById("countdown");
-        const updateCountdown = () => {
-            if (countdownTime >= 0) {
-                countdownDisplay.textContent = countdownTime;
-                countdownTime--;
-            }  else {
-                // window.location.href = "results.html";
-            }
-        }; 
-        const countdownInterval = setInterval(updateCountdown, 1000);
+        function replaceContent() {
+            countdownRunStatus = false;
+            // feat of geniality ngl
+            countdownDisplay.click();
+        }
+        
+        
+        // countdown timer -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        if (countdownRunStatus) {
+            let countdownTime = "{{ duration }}";
+            const updateCountdown = () => {
+                if (countdownTime >= 0) {
+                    countdownDisplay.textContent = countdownTime;
+                    countdownTime--;
+                }  else if (countdownTime < 0) {
+                    replaceContent();
+                }
+            }; 
+            const countdownInterval = setInterval(updateCountdown, 1000);
+        }
 
         // generate problems -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const addition_left_min = "{{ addition_left_min }}";
@@ -98,8 +114,6 @@
             const equationBox = document.getElementById("equation-box");
             // remember you can only use .value on inputs
             equationBox.innerHTML = problem;
-            console.log("PROBLEM: " + problem);
-            console.log("ANSWER: " + answer);
         }
         
         // check answer ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -112,7 +126,6 @@
             scoreHeader.innerHTML = "";
             scoreHeader.innerHTML = `${score}`;
 
-            // need to call a function to generate problems
             inputBox.value = "";
             produceEquation();
             }
