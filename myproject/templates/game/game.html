@@ -17,6 +17,7 @@
     <header class="main-header game">
         <div class="header-container game">
             <form>
+                <!-- this method of hx-trigger may pose an issue. but only if the user clicks the seconds and that would ruin their session -->
                 <div class="logo game">Seconds Left:<div hx-get="{% url 'show_game_results' %}" hx-trigger="click" hx-target="#game-banner" hx-replace="innerHTML" class="logo countdown" id="countdown">{{ duration }}</div></div>
                 {% csrf_token %}
             </form>
@@ -34,22 +35,19 @@
 
         <div id="game-banner" class="game-banner">
             <h1 class="header game" id="equation-box"></h1>
-            <input class="user-input game" type="number" onchange="checkSolutionStatus()" id="user-input-game">
+            <dialog><input class="user-input game" type="number" onchange="checkSolutionStatus()" id="user-input-game" autocomplete="off" required autofocus></dialog>
         </div>
     </main>
 
     <script>
         // replace after countdown ends -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        let countdownRunStatus = true;
-        const countdownDisplay = document.getElementById("countdown");
-        function replaceContent() {
-            countdownRunStatus = false;
-            // feat of geniality ngl
-            countdownDisplay.click();
-        }
+        
+
         
         
         // countdown timer -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        let countdownRunStatus = true;
+        const countdownDisplay = document.getElementById("countdown");
         if (countdownRunStatus) {
             let countdownTime = "{{ duration }}";
             const updateCountdown = () => {
@@ -57,7 +55,8 @@
                     countdownDisplay.textContent = countdownTime;
                     countdownTime--;
                 }  else if (countdownTime < 0) {
-                    replaceContent();
+                    countdownRunStatus = false;
+                    countdownDisplay.click();
                 }
             }; 
             const countdownInterval = setInterval(updateCountdown, 1000);
@@ -78,7 +77,7 @@
         let answer;
         function produceEquation() {
             function getRandomAdditionInt(min, max) {
-                // Math.random() produces a float value between 0 and 1 (like .7). not super sue what adding min to the end does
+                // Math.random() produces a float value between 0 and 1 (like .7). not super sure what adding min to the end does
                 return Math.floor(Math.random() * (max - min + 1)) + min;
             }
             
@@ -121,13 +120,13 @@
         let score = 0;
         function checkSolutionStatus() {
             if (inputBox.value == answer) {
-            const scoreHeader = document.getElementById("score");
-            score += 1;
-            scoreHeader.innerHTML = "";
-            scoreHeader.innerHTML = `${score}`;
+                const scoreHeader = document.getElementById("score");
+                score += 1;
+                scoreHeader.innerHTML = "";
+                scoreHeader.innerHTML = `${score}`;
 
-            inputBox.value = "";
-            produceEquation();
+                inputBox.value = "";
+                produceEquation();
             }
         }
         produceEquation();
