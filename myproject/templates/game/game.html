@@ -35,7 +35,7 @@
 
         <div id="game-banner" class="game-banner">
             <h1 class="header game" id="equation-box"></h1>
-            <dialog><input class="user-input game" type="number" onchange="checkSolutionStatus()" id="user-input-game" autocomplete="off" required autofocus></dialog>
+            <input class="user-input game" type="number" id="user-input-game">
         </div>
     </main>
 
@@ -50,6 +50,7 @@
         const countdownDisplay = document.getElementById("countdown");
         if (countdownRunStatus) {
             let countdownTime = "{{ duration }}";
+            let countdownInterval;
             const updateCountdown = () => {
                 if (countdownTime >= 0) {
                     countdownDisplay.textContent = countdownTime;
@@ -57,9 +58,10 @@
                 }  else if (countdownTime < 0) {
                     countdownRunStatus = false;
                     countdownDisplay.click();
+                    clearInterval(countdownInterval);
                 }
             }; 
-            const countdownInterval = setInterval(updateCountdown, 1000);
+            countdownInterval = setInterval(updateCountdown, 1000);
         }
 
         // generate problems -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -76,16 +78,16 @@
         let problem;
         let answer;
         function produceEquation() {
-            function getRandomAdditionInt(min, max) {
+            function getRandomInt(min, max) {
                 // Math.random() produces a float value between 0 and 1 (like .7). not super sure what adding min to the end does
                 return Math.floor(Math.random() * (max - min + 1)) + min;
             }
             
-            let addition_num1 = getRandomAdditionInt(addition_left_min, addition_left_max);
-            let addition_num2 = getRandomAdditionInt(addition_right_min, addition_right_max);
+            let addition_num1 = getRandomInt(addition_left_min, addition_left_max);
+            let addition_num2 = getRandomInt(addition_right_min, addition_right_max);
 
-            let multiplication_num1 = getRandomAdditionInt(multiplication_left_min, multiplication_left_max);
-            let multiplication_num2 = getRandomAdditionInt(multiplication_right_min, multiplication_right_max);
+            let multiplication_num1 = getRandomInt(multiplication_left_min, multiplication_left_max);
+            let multiplication_num2 = getRandomInt(multiplication_right_min, multiplication_right_max);
 
             let operations = ['+', '-', '*', '/'];
             let operation = operations[Math.floor(Math.random() * operations.length)];
@@ -118,7 +120,7 @@
         // check answer ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const inputBox = document.getElementById("user-input-game");
         let score = 0;
-        function checkSolutionStatus() {
+        inputBox.addEventListener("input", () =>  {
             if (inputBox.value == answer) {
                 const scoreHeader = document.getElementById("score");
                 score += 1;
@@ -128,7 +130,7 @@
                 inputBox.value = "";
                 produceEquation();
             }
-        }
+        });
         produceEquation();
     </script>
 
