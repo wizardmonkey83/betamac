@@ -16,7 +16,22 @@ def pass_range_parameters(request):
             multiplication_right_min = form.cleaned_data["multiplication_right_min"]
             multiplication_right_max = form.cleaned_data["multiplication_right_max"]
 
+            addition_enabled = form.cleaned_data["addition_enabled"]
+            subtraction_enabled = form.cleaned_data["subtraction_enabled"]
+            multiplication_enabled = form.cleaned_data["multiplication_enabled"]
+            division_enabled = form.cleaned_data["division_enabled"]
+
             duration_selector = form.cleaned_data["duration_selector"]
+
+            allowed_operations = []
+            if addition_enabled:
+                allowed_operations.append('+')
+            if subtraction_enabled:
+                allowed_operations.append('-')
+            if multiplication_enabled:
+                allowed_operations.append('*')
+            if division_enabled:
+                allowed_operations.append('/')
 
             context = {
                 "addition_left_min": addition_left_min,
@@ -30,6 +45,8 @@ def pass_range_parameters(request):
                 "multiplication_right_max": multiplication_right_max,
 
                 "duration": duration_selector,
+
+                "allowed_operations": allowed_operations,
             }
 
             return render(request, "game/game.html", context)

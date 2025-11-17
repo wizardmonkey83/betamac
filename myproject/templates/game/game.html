@@ -39,6 +39,8 @@
         </div>
     </main>
 
+    {{ allowed_operations|json_script:"allowed-operations-json" }}
+
     <script>
         // replace after countdown ends -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         
@@ -85,12 +87,10 @@
             
             let addition_num1 = getRandomInt(addition_left_min, addition_left_max);
             let addition_num2 = getRandomInt(addition_right_min, addition_right_max);
-
-
             let multiplication_num1 = getRandomInt(multiplication_left_min, multiplication_left_max);
             let multiplication_num2 = getRandomInt(multiplication_right_min, multiplication_right_max);
 
-            let operations = ['+', '-', '*', '/'];
+            let operations = JSON.parse(document.getElementById("allowed-operations-json").textContent);
             let operation = operations[Math.floor(Math.random() * operations.length)];
 
             switch (operation) {
@@ -124,7 +124,7 @@
         const inputBox = document.getElementById("user-input-game");
         let score = 0;
         inputBox.addEventListener("input", () =>  {
-            if (inputBox.value == answer) {
+            if (parseInt(inputBox.value, 10) === answer) {
                 const scoreHeader = document.getElementById("score");
                 score += 1;
                 scoreHeader.innerHTML = "";
