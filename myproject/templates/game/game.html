@@ -86,6 +86,7 @@
             let addition_num1 = getRandomInt(addition_left_min, addition_left_max);
             let addition_num2 = getRandomInt(addition_right_min, addition_right_max);
 
+
             let multiplication_num1 = getRandomInt(multiplication_left_min, multiplication_left_max);
             let multiplication_num2 = getRandomInt(multiplication_right_min, multiplication_right_max);
 
@@ -94,21 +95,21 @@
 
             switch (operation) {
                 case '+':
-                    problem = `${addition_num1} + ${addition_num2} =`;
+                    problem = `${parseInt(addition_num1, 10)} + ${parseInt(addition_num2, 10)} =`;
                     // numbers were being read as strings, not ints. not sure why but parseInt fixes the issue.
-                    answer = parseInt(addition_num1) + parseInt(addition_num2);
+                    answer = parseInt(addition_num1, 10) + parseInt(addition_num2, 10);
                     break;
                 case '-':
-                    problem = `${addition_num1} - ${addition_num2} =`;
-                    answer = parseInt(addition_num1) - parseInt(addition_num2);
+                    problem = `${parseInt(addition_num1, 10)} - ${parseInt(addition_num2, 10)} =`;
+                    answer = parseInt(addition_num1, 10) - parseInt(addition_num2, 10);
                     break;
                 case '*':
-                    problem = `${multiplication_num1} x ${multiplication_num2} =`;
-                    answer = multiplication_num1 * multiplication_num2;
+                    problem = `${parseInt(multiplication_num1, 10)} x ${parseInt(multiplication_num2, 10)} =`;
+                    answer = parseInt(multiplication_num1, 10) * parseInt(multiplication_num2, 10);
                     break;
                 case '/':
-                    problem = `${multiplication_num1} / ${multiplication_num2} =`;
-                    answer = multiplication_num1 / multiplication_num2;
+                    problem = `${parseInt(multiplication_num1, 10)} / ${parseInt(multiplication_num2, 10)} =`;
+                    answer = parseInt(multiplication_num1, 10) / parseInt(multiplication_num2, 10);
                     break;
             }
 
