@@ -1,0 +1,92 @@
+<form>
+    <div class="arithmetic-type-container">
+        <div class="header-container arithmetic-type">
+            <label class="label duration">Addition</label>
+            <label class="switch">
+                <input type="checkbox" name="addition_enabled" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="range-container">
+            <p class="description-text range">
+                Range: (
+                {{ parameter_form.addition_left_min }}
+                to 
+                {{ parameter_form.addition_left_max }}
+                ) + (
+                {{ parameter_form.addition_right_min }} 
+                to 
+                {{ parameter_form.addition_right_max }}
+                )
+            </p>
+        </div>
+
+        <div class="header-container arithmetic-type">
+            <label class="label duration">Subtraction</label>
+            <label class="switch">
+                <input type="checkbox" name="subtraction_enabled" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="range-container">
+            <p class="description-text range">
+                Addition problems in reverse.
+            </p>
+        </div>
+
+        <div class="header-container arithmetic-type">
+            <label class="label duration">Multiplication</label>
+            <label class="switch">
+                <input type="checkbox" name="multiplication_enabled" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="range-container">
+            <p class="description-text range">
+                Range: (
+                {{ parameter_form.multiplication_left_min }} 
+                to 
+                {{ parameter_form.multiplication_left_max }} 
+                ) + (
+                {{ parameter_form.multiplication_right_min }}  
+                to 
+                {{ parameter_form.multiplication_right_max }} 
+                )
+            </p>
+        </div>
+
+        <div class="header-container arithmetic-type">
+            <label class="label duration">Division</label>
+            <label class="switch">
+                <input type="checkbox" name="division_enabled" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="range-container">
+            <p class="description-text range">
+                Multiplication problems in reverse.
+            </p>
+        </div>
+        <div id="duration-container" class="duration-container">
+            <div class="left-side index">
+                <label class="label duration">Duration: </label> 
+                <select name="durations" id="duration-selector" class="duration-selector">
+                    <option value="3">3 seconds</option>
+                    <option value="60">60 seconds</option>
+                    <option selected="selected" value="120">120 seconds</option>
+                    <option value="300">300 seconds</option>
+                    <option value="600">600 seconds</option>
+                </select>
+            </div>
+            <input type="hidden" name="duration_selector" id="duration_selector" value="120"/>
+        </div>
+        <div class="join-container">
+            <div class="join-details-container">
+                <label class="label duration">Lobby Code</label>
+                <span class="label lobby-code">1S9I</span>
+            </div>
+            {% csrf_token %}
+            <button type="submit" id="join-lobby-button" class="submit-btn">Host</button>
+        </div>
+    </div>
+</form>

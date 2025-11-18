@@ -64,8 +64,17 @@ def show_game_results(request):
     return render(request, "game/solo/solo_results_fragment.html")
 
 def load_solo(request):
-    return render(request, "game/solo/solo_fragment.html")
+    form = PassRangeParameters()
+    return render(request, "game/solo/solo_fragment.html", {"form": form})
 
 def load_multi(request):
     return render(request, "game/multi/multi_fragment.html")
+
+def load_join(request):
+    return render(request, "game/multi/join_fragment.html")
+
+def load_host(request):
+    parameter_form = PassRangeParameters()
+    return render(request, "game/multi/host_fragment.html", {"parameter_form": parameter_form})
+
 

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
     <link rel="icon" type="image/x-icon" href="/static/icons/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,14 +24,15 @@
     </header>
 
     <main class="index-container">
-        <form> 
-            <div class="game-mode-tabs">
-                <button type="submit" class="game-mode-tab active" hx-get="{% url 'load_solo' %}" hx-target="#mode" hx-swap="innerHTML">Solo</button>
-                <button type="submit" class="game-mode-tab" hx-get="{% url 'load_multi' %}" hx-target="#mode" hx-swap="innerHTML">Multiplayer</button>
+        <form class="game-mode-tab-container"> 
+            <div id="game-mode-tabs" class="game-mode-tabs">
+                <button type="button" class="game-mode-tab active" hx-get="{% url 'load_solo' %}" hx-target="#mode" hx-swap="innerHTML">Solo</button>
+                <button type="button" class="game-mode-tab" hx-get="{% url 'load_multi' %}" hx-target="#mode" hx-swap="innerHTML">Multiplayer</button>
+                {% csrf_token %}
             </div>
-            {% csrf_token %}
         </form>
         <form method="POST" action="{% url 'pass_range_parameters' %}" >
+            {% csrf_token %}
             <div class="instruction-container index">
                 <div class="upper-container index">
                     <h1 class="header index">Arithmetic Game</h1>
@@ -68,6 +70,20 @@
             const hiddenDuration = document.getElementById("duration_selector");
             const selectedOption = durationSelector.options[durationSelector.selectedIndex];
             hiddenDuration.value = selectedOption.value;
+        }
+
+        // switch active status -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const gameModeTabs = document.getElementById("game-mode-tabs");
+        if (gameModeTabs) {
+            gameModeTabs.addEventListener('click', function(e) {
+                if (e.target.tagName === 'BUTTON') {
+                    const buttons = gameModeTabs.querySelectorAll('button');
+                    buttons.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    e.target.classList.add('active');
+                }
+            });
         }
     </script>
 

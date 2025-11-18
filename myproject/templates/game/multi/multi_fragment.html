@@ -1,1 +1,24 @@
-<p>mutli</p>
+<form>
+    <div id="hosting-tabs" class="game-mode-tabs">
+        <button type="button" class="game-mode-tab active" hx-get="{% url 'load_join' %}" hx-target="#hosting-method-container" hx-swap="innerHTML">Join Game</button>
+        <button type="button" class="game-mode-tab" hx-get="{% url 'load_host' %}" hx-target="#hosting-method-container" hx-swap="innerHTML">Host Game</button>
+        {% csrf_token %}
+    </div>
+</form>
+<div id="hosting-method-container" class="hosting-method-container">
+    {% include "game/multi/join_fragment.html" %}
+</div>
+<script>
+    const hostingTabs = document.getElementById("hosting-tabs");
+    if (hostingTabs) {
+        hostingTabs.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON') {
+                const buttons = hostingTabs.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+            }
+        });
+    }
+</script>

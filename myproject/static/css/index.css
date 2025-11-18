@@ -48,9 +48,7 @@ a {
     color: #977005;
 }
 
-.track-viewport {
-    overflow: hidden;
-}
+
 
 .footer {
     position: fixed;
@@ -97,7 +95,7 @@ a {
 .instruction-container {
     align-items: flex-start;
     justify-content: center;
-    margin-top: 3rem;
+    margin-top: 0rem;
     flex-wrap: wrap;
 }
 
@@ -175,6 +173,12 @@ a {
     margin-right: .5rem;
 }
 
+.label.lobby-code {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-right: .5rem;
+}
+
 .switch {
   position: relative;
   display: inline-block;
@@ -232,4 +236,37 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.game-mode-tab-container {
+    margin-top: 3rem;
+}
+
+.hosting-method-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.join-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.join-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.lobby-input {
+    font-size: 1.5rem;
+    border-radius: 5px;
+    padding: 5px;
+    font-family: inherit;
+    margin-top: 1rem;
+
 }
