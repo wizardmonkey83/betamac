@@ -23,12 +23,15 @@
     </header>
 
     <main class="index-container">
-        <form method="POST" action="{% url 'pass_range_parameters' %}">
+        <form> 
+            <div class="game-mode-tabs">
+                <button type="submit" class="game-mode-tab active" hx-get="{% url 'load_solo' %}" hx-target="#mode" hx-swap="innerHTML">Solo</button>
+                <button type="submit" class="game-mode-tab" hx-get="{% url 'load_multi' %}" hx-target="#mode" hx-swap="innerHTML">Multiplayer</button>
+            </div>
+            {% csrf_token %}
+        </form>
+        <form method="POST" action="{% url 'pass_range_parameters' %}" >
             <div class="instruction-container index">
-                <div class="game-mode-tabs">
-                    <button class="game-mode-tab active">Solo</button>
-                    <button class="game-mode-tab">Friends</button>
-                </div>
                 <div class="upper-container index">
                     <h1 class="header index">Arithmetic Game</h1>
                     <div class="header-container arithmetic-type">
@@ -49,95 +52,9 @@
             
 
             <!-- when the user boots up the'll see this. -->
-            <div id="solo-mode" class="arithmetic-type-container">
-                <div class="header-container arithmetic-type">
-                    <label class="label duration">Addition</label>
-                    <label class="switch">
-                        <input type="checkbox" name="addition_enabled" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div class="range-container">
-                    <p class="description-text range">
-                        Range: (
-                        {{ form.addition_left_min }}
-                        to 
-                        {{ form.addition_left_max }}
-                        ) + (
-                        {{ form.addition_right_min }} 
-                        to 
-                        {{ form.addition_right_max }}
-                        )
-                    </p>
-                </div>
-
-                <div class="header-container arithmetic-type">
-                    <label class="label duration">Subtraction</label>
-                    <label class="switch">
-                        <input type="checkbox" name="subtraction_enabled" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div class="range-container">
-                    <p class="description-text range">
-                        Addition problems in reverse.
-                    </p>
-                </div>
-
-                <div class="header-container arithmetic-type">
-                    <label class="label duration">Multiplication</label>
-                    <label class="switch">
-                        <input type="checkbox" name="multiplication_enabled" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div class="range-container">
-                    <p class="description-text range">
-                        Range: (
-                        {{ form.multiplication_left_min }} 
-                        to 
-                        {{ form.multiplication_left_max }} 
-                        ) + (
-                        {{ form.multiplication_right_min }}  
-                        to 
-                        {{ form.multiplication_right_max }} 
-                        )
-                    </p>
-                </div>
-
-                <div class="header-container arithmetic-type">
-                    <label class="label duration">Division</label>
-                    <label class="switch">
-                        <input type="checkbox" name="division_enabled" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div class="range-container">
-                    <p class="description-text range">
-                        Multiplication problems in reverse.
-                    </p>
-                </div>
-                <div id="duration-container" class="duration-container">
-                    <div class="left-side index">
-                        <label class="label duration">Duration: </label> 
-                        <select name="durations" id="duration-selector" class="duration-selector">
-                            <option value="3">3 seconds</option>
-                            <option value="60">60 seconds</option>
-                            <option selected="selected" value="120">120 seconds</option>
-                            <option value="300">300 seconds</option>
-                            <option value="600">600 seconds</option>
-                        </select>
-                    </div>
-                    {% csrf_token %}
-                    <input type="hidden" name="duration_selector" id="duration_selector" value="120"/>
-                    <button type="submit" id="start-game-button" class="submit-btn">Start</button>
-                </div>
+            <div id="mode" class="arithmetic-type-container">
+                {% include "game/solo/solo_fragment.html" %}
             </div>
-
-            <!-- default display is none, only appears when toggled -->
-                <div id="friends-mode">
-                <!-- will do this in a bit -->
-                </div>
         </form>
     </main>
 

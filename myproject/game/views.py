@@ -58,5 +58,14 @@ def pass_range_parameters(request):
         form = PassRangeParameters()
     return render(request, "index.html", {"form": form})
 
+
+
 def show_game_results(request):
-    return render(request, "game/solo_results_fragment.html")
+    return render(request, "game/solo/solo_results_fragment.html")
+
+def load_solo(request):
+    return render(request, "game/solo/solo_fragment.html")
+
+def load_multi(request):
+    return render(request, "game/multi/multi_fragment.html")
+
