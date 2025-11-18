@@ -21,6 +21,9 @@ def pass_range_parameters(request):
             multiplication_enabled = form.cleaned_data["multiplication_enabled"]
             division_enabled = form.cleaned_data["division_enabled"]
 
+            distractions_enabled = form.cleaned_data["distractions_enabled"]
+            print(f"DISTRACTIONS ENABLED: {distractions_enabled}" )
+
             duration_selector = form.cleaned_data["duration_selector"]
 
             allowed_operations = []
@@ -45,6 +48,7 @@ def pass_range_parameters(request):
                 "multiplication_right_max": multiplication_right_max,
 
                 "duration": duration_selector,
+                "distractions": distractions_enabled,
 
                 "allowed_operations": allowed_operations,
             }

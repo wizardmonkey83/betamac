@@ -23,25 +23,33 @@
     </header>
 
     <main class="index-container">
-
-        <div class="instruction-container index">
-            <div class="game-mode-tabs">
-                <button class="game-mode-tab active">Solo</button>
-                <button class="game-mode-tab">Friends</button>
+        <form method="POST" action="{% url 'pass_range_parameters' %}">
+            <div class="instruction-container index">
+                <div class="game-mode-tabs">
+                    <button class="game-mode-tab active">Solo</button>
+                    <button class="game-mode-tab">Friends</button>
+                </div>
+                <div class="upper-container index">
+                    <h1 class="header index">Arithmetic Game</h1>
+                    <div class="header-container arithmetic-type">
+                        <label class="label duration">Distractions</label>
+                        <label class="switch">
+                            <input type="checkbox" name="distractions_enabled">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <p class="description-text index">
+                    The Arithmetic Game is a fast-paced speed drill where you are given two minutes to solve as many arithmetic problems as you can.
+                </p>
+                <p class="description-text index">
+                    If you have questions, consult the BetaMac "How to Play" page.
+                </p>
             </div>
-            <h1 class="header index">Arithmetic Game</h1>
-            <p class="description-text index">
-                The Arithmetic Game is a fast-paced speed drill where you are given two minutes to solve as many arithmetic problems as you can.
-            </p>
-            <p class="description-text index">
-                If you have questions, consult the BetaMac "How to Play" page.
-            </p>
-        </div>
-        
+            
 
-        <!-- when the user boots up the'll see this. -->
-        <div id="solo-mode">
-            <form method="POST" action="{% url 'pass_range_parameters' %}" class="arithmetic-type-container">
+            <!-- when the user boots up the'll see this. -->
+            <div id="solo-mode" class="arithmetic-type-container">
                 <div class="header-container arithmetic-type">
                     <label class="label duration">Addition</label>
                     <label class="switch">
@@ -124,14 +132,13 @@
                     <input type="hidden" name="duration_selector" id="duration_selector" value="120"/>
                     <button type="submit" id="start-game-button" class="submit-btn">Start</button>
                 </div>
-            </form>
-        </div>
-
-        <!-- default display is none, only appears when toggled -->
-            <div id="friends-mode">
-            <!-- will do this in a bit -->
             </div>
 
+            <!-- default display is none, only appears when toggled -->
+                <div id="friends-mode">
+                <!-- will do this in a bit -->
+                </div>
+        </form>
     </main>
 
     <footer>

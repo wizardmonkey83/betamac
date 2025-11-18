@@ -17,4 +17,6 @@ class PassRangeParameters(forms.Form):
     multiplication_enabled = forms.BooleanField(initial=True, required=False)
     division_enabled = forms.BooleanField(initial=True, required=False)
 
+    distractions_enabled = forms.BooleanField(initial=False, required=False)
+
     duration_selector = forms.IntegerField(required=True)

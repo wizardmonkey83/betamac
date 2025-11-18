@@ -38,6 +38,9 @@
             <input class="user-input game" type="number" id="user-input-game">
         </div>
     </main>
+    {% if distractions %}
+        <audio id="audio-player" src="" loop="loop"></audio>
+    {% endif %}
 
     {{ allowed_operations|json_script:"allowed-operations-json" }}
 
@@ -135,6 +138,28 @@
             }
         });
         produceEquation();
+
+        // play random noise ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const audioFiles = [
+            "{% static 'sounds/birds-chirping.mp3' %}",
+            "{% static 'sounds/sounds/car-alarm.mp3' %}",
+            "{% static 'sounds/people-talking.mp3' %}",
+            "{% static 'sounds/heavy-rainfall.mp3' %}",
+            "{% static 'sounds/gunshots.mp3' %}",
+            "{% static 'sounds/wind.mp3' %}",
+        ];
+
+        window.onload = function playSound() {
+            setTimeout(function() {
+                const randomSoundIndex = Math.floor(Math.random() * audioFiles.length);
+                const selectedFile = audioFiles[randomSoundIndex];
+                
+                const audioPlayer = document.getElementById("audio-player");
+                audioPlayer.src = selectedFile;
+                audioPlayer.play();
+            }, 2000);
+        };
+
     </script>
 
 </body>
