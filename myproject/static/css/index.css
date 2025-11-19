@@ -1,7 +1,7 @@
 body {
     background-color: #EFEFEF;
     color: #1A1A1A;
-    font-family: "Stack Sans Notch", sans-serif;
+    font-family: "Space Grotesk", sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -51,13 +51,11 @@ a {
 
 
 .footer {
-    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
     text-align: center;
     margin-bottom: 1rem;
-    padding: 0.75rem 2rem;
     background-color: #EFEFEF;
 }
 
@@ -110,6 +108,7 @@ a {
     font-size: 1rem;
     padding: 5px 10px;
     cursor: pointer;
+    font-family: inherit;
 }
 
 .game-mode-tab.active {
@@ -126,7 +125,7 @@ a {
 }
 
 .description-text {
-    font-weight: 100;
+    font-weight: 200;
 }
 
 .description-text.range {

@@ -1,4 +1,4 @@
-<form>
+<form method="POST" action="{% url 'host_game' %}">
     <div class="arithmetic-type-container">
         <div class="header-container arithmetic-type">
             <label class="label duration">Addition</label>
@@ -83,10 +83,32 @@
         <div class="join-container">
             <div class="join-details-container">
                 <label class="label duration">Lobby Code</label>
-                <span class="label lobby-code">1S9I</span>
+                <span id="lobby-code" class="label lobby-code"></span>
             </div>
             {% csrf_token %}
-            <button type="submit" id="join-lobby-button" class="submit-btn">Host</button>
+            <input type="hidden" name="lobby-code" id="lobby-code-input" value="">
+            <button type="submit" id="host-lobby-button" class="submit-btn">Host</button>
         </div>
     </div>
 </form>
+<script>
+    // generate lobby code ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    const lobbyCodeContainer = document.getElementById("lobby-code");
+    function generateLobbyCode() {
+        let lobbyCode = "";
+        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for (let i = 0; i < 6; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            lobbyCode += characters.charAt(randomIndex);
+        }
+        lobbyCodeContainer.innerText = lobbyCode;
+    }
+    generateLobbyCode();
+
+    // pass lobby code to view -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    const hostButton = document.getElementById("host-lobby-button");
+    hostButton.addEventListener("click", () => {
+        const lobbyCodeInput = document.getElementById("lobby-code-input");
+        lobbyCodeInput.value = lobbyCodeContainer.innerText;
+    })
+</script>

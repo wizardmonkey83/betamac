@@ -1,8 +1,8 @@
-<form>
+<form method="POST" action="{% url 'join_game' %}">
     <div class="join-container">
         <div class="join-details-container">
             <label class="label duration">Enter Code</label>
-            <input type="text" class="lobby-input" id="lobby-input" name="lobby-input" required>
+            <input type="text" class="lobby-input" id="lobby-input" name="lobby_input" required>
         </div>
         {% csrf_token %}
         <button type="submit" id="join-lobby-button" class="submit-btn">Join</button>

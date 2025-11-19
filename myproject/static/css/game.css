@@ -1,7 +1,7 @@
 body {
     background-color: #EFEFEF;
     color: #1A1A1A;
-    font-family: "Stack Sans Notch", sans-serif;
+    font-family: "Space Grotesk", sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -74,9 +74,6 @@ a {
     color: #977005;
 }
 
-.track-viewport {
-    overflow: hidden;
-}
 
 .header.game {
     margin-bottom: .5rem;
@@ -85,7 +82,7 @@ a {
     margin-right: 1rem;
     margin-top: .1rem;
     margin-bottom: .1rem;
-    font-family: "DM Sans", sans-serif;
+    font-family: inherit;
 }
 
 .game-container {
@@ -109,7 +106,7 @@ a {
 .user-input.game {
     border-radius: 5px;
     font-size: 2.25rem;
-    font-family: "DM Sans", sans-serif;
+    font-family: inherit;
     font-weight: 100;
     max-width: 200px;
 }

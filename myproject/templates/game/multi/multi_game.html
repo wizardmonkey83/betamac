@@ -26,8 +26,14 @@
         <nav class="main-nav">
             <ul>
                 <div class="score-container game">
-                    <li>Score:</li>
-                    <li class="score-value" id="score">0</li>
+                    <li>Your Score:</li>
+                    <li class="score-value" id="score_a">0</li>
+                </div>
+            </ul>
+            <ul>
+                <div class="score-container game">
+                    <li>Opponents Score:</li>
+                    <li class="score-value" id="score_b">0</li>
                 </div>
             </ul>
         </nav>
@@ -44,11 +50,29 @@
     {% endif %}
 
     {{ allowed_operations|json_script:"allowed-operations-json" }}
-
+    {{ lobby_code|json_script:"lobby-code" }}
     <script>
-        // replace after countdown ends -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        
+        // start websocket -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const lobbyCode = document.getElementById("lobby-code").textContent;
+        const gameSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/game/'
+            + lobbyCode
+            + '/'
+        );
 
+        // handle incoming scores -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const opponentsScore = document.getElementById("score_b");
+        gameSocket.onmessage() = function(e) {
+            const data = JSON.parse(e.data);
+            // assumes that score is held within a dictionary
+            opponentsScore.innerText = data.score;
+        };
+
+        gameSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
         
         
         // countdown timer -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -126,15 +150,26 @@
         
         // check answer ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const inputBox = document.getElementById("user-input-game");
+        let scoreB = document.getElementById("score_b");
         let score = 0;
         inputBox.addEventListener("input", () =>  {
+            // correct answer
             if (parseInt(inputBox.value, 10) === answer) {
-                const scoreHeader = document.getElementById("score");
+                const scoreHeader = document.getElementById("score_a");
                 score += 1;
                 scoreHeader.innerHTML = "";
                 scoreHeader.innerHTML = `${score}`;
-
                 inputBox.value = "";
+
+                // think this is the right place for this
+                chatSocket.send(JSON.stringify({
+                    // sends the current users score. not sure how im going to assign these
+                    'score_a': score_a,
+                    'score_b': score_b,
+                    // think this works....
+                    'time': countdownDisplay.textContent,
+                }));
+
                 produceEquation();
             }
         });
