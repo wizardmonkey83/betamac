@@ -55,25 +55,26 @@ class GameConsumer(AsyncWebsocketConsumer):
             )
 
     async def game_start(self, message):
-        # start game
-        if message == 'active':
-            # send parameters to multi_game.html
-            await self.send(text_data=json.dumps({
-                "addition_left_min": r.hmget(self.redis_game_key, 'addition_left_min'),
-                "addition_left_max": r.hmget(self.redis_game_key, 'addition_left_max'),
-                "addition_right_min": r.hmget(self.redis_game_key, 'addition_right_min'),
-                "addition_right_max": r.hmget(self.redis_game_key, 'addition_right_max'),
+        # send parameters to multi_game.html
+        parameters = await r.hgetall(self.redis_game_key)
 
-                "multiplication_left_min": r.hmget(self.redis_game_key, 'multiplication_left_min'),
-                "multiplication_left_max": r.hmget(self.redis_game_key, 'multiplication_left_max'),
-                "multiplication_right_min": r.hmget(self.redis_game_key, 'multiplication_right_min'),
-                "multiplication_right_max": r.hmget(self.redis_game_key, 'multiplication_right_max'),
+        payload = {
+            "addition_left_min": parameters["addition_left_min"],
+            "addition_left_max": parameters["addition_left_max"],
+            "addition_right_min": parameters["addition_right_min"],
+            "addition_right_max": parameters["addition_right_max"],
 
-                "duration": r.hmget(self.redis_game_key, 'duration_selector'),
-                "distractions": r.hmget(self.redis_game_key, 'distractions_enabled'),
+            "multiplication_left_min": parameters["multiplication_left_min"],
+            "multiplication_left_max": parameters["multiplication_left_max"],
+            "multiplication_right_min": parameters["multiplication_right_min"],
+            "multiplication_right_max": parameters["multiplication_right_max"],
 
-                "allowed_operations": r.hmget(self.redis_game_key, 'allowed_operations'),
-            }))
+            "duration": parameters["duration_selector"],
+            "distractions": parameters["distractions_enabled"],
+
+            "allowed_operations": parameters["allowed_operations"],
+        }
+        await self.send(text_data=json.dumps(payload))
 
 
 

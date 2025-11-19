@@ -95,15 +95,35 @@
         }
 
         // generate problems -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        const addition_left_min = parseInt("{{ addition_left_min }}", 10);
-        const addition_left_max = parseInt("{{ addition_left_max }}", 10);
-        const addition_right_min = parseInt("{{ addition_right_min }}", 10);
-        const addition_right_max = parseInt("{{ addition_right_max }}", 10);
+        let addition_left_min = 2;
+        let addition_left_max = 100;
+        let addition_right_min = 2;
+        let addition_right_max = 100;
 
-        const multiplication_left_min = parseInt("{{ multiplication_left_min }}", 10);
-        const multiplication_left_max = parseInt("{{ multiplication_left_max }}", 10);
-        const multiplication_right_min = parseInt("{{ multiplication_right_min }}", 10);
-        const multiplication_right_max = parseInt("{{ multiplication_right_max }}", 10);
+        let multiplication_left_min = 2;
+        let multiplication_left_max = 12;
+        let multiplication_right_min = 2;
+        let multiplication_right_max = 100;
+    
+        gameSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+
+            if (data["type"] == "game_config") {
+                addition_left_min = parseInt(data["addition_left_min"], 10);
+                addition_left_max = parseInt(data["addition_left_max"], 10);
+                addition_right_min = parseInt(data["addition_right_min"], 10);
+                addition_right_max = parseInt(data["addition_right_max"], 10);
+
+                multiplication_left_min = parseInt(data["multiplication_left_min"], 10);
+                multiplication_left_max = parseInt(data["multiplication_left_max"], 10);
+                multiplication_right_min = parseInt(data["multiplication_right_min"], 10);
+                multiplication_right_max = parseInt(data["multiplication_right_max"], 10);
+            } else if (data["type"] == "score_update") {
+
+            } else if (data["type"] == "game_end") {
+                
+            }
+        }
         
         let problem;
         let answer;
