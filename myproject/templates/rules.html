@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+    <link rel="icon" type="image/x-icon" href="/static/icons/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Notch:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Workbench&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <title>BetaMac</title>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo"><a href="{% url 'index' %}">BetaMac</a></div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="{% url 'load_rules' %}">How to Play</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="rules-container">
+        <h1 class="header rules">Welcome to BetaMac!</h1>
+
+        <div class="rules-section-container">
+            <label class="label rules">Getting Started</label>
+            <p class="description-text">
+                Before we dive into the rules, and strategies for becoming a BetaMac master, I feel it is important to go over the role mental math plays in life.
+            </p>
+            <p class="description-text">
+                Through repeated exposure to mental calculations, your brain is trained to recognize patterns, find optimizations, and criically think. 
+                Not only does this enhance your ability to solve complex problems, it also serves as a tool in everyday life.
+            </p>
+            <p class="description-text">
+                Imagine you're shopping for groceries, writing a tip at a restaurant, or adjusting ingredient quantities while baking. 
+                Yes, you could use a calculuator for all of these operations, but imagine the power in being to perform the required calculation near-instantly.
+                So while BetaMac can be used for interview prep, don't discount its relevance the next time you need to give someone change.
+            </p>
+        </div>
+
+        <div class="rules-section-container">
+            <label class="label rules">Rules and Regulations</label>
+            <p class="description-text">
+                BetaMac is simple in nature. 
+                To start, you can toggle the operation categories (addition, subtraction, etc) on/off depending on preference.
+                Once you've selected the desired categories, a range needs to be configured.
+                You can stick to the default or opt for a unique configuration.
+                If you're feeling abitious, toggle on "Distractions" mode which will play a randomly selected noise for the duration of the game.
+                To begin the game hit "Start".
+            </p>
+        </div>
+
+        <div class="rules-section-container">
+            <label class="label rules">Multiplayer Mode</label>
+            <p class="description-text">
+                Multiplayer mode is my twist (in addition to distractions) on the original zetamac.
+                To play, you can join or host a lobby.
+                If you go with join, enter the code the host provides and click "Join".
+                If you decide to host a game, copy the six character code generated at the bottom of the screen and send it to your opponent.
+                Then click "Host". 
+            </p>
+            <p class="description-text">
+                NOTE: For the time being, games can only consist of two players. This will be increased in the future.
+            </p>
+        </div>
+
+        <div class="rules-section-container">
+            <label class="label rules">Tips and Tricks</label>
+            <p class="description-text">
+                I am no professional at solving mental math calculations, but I can offer some advice to help you through the BetaMac journey.
+            </p>
+            <p class="description-text">
+                When faced with larger numbers, break them into smaller, more manageable parts. 
+                For instance, to calculate 47 + 36, you can break it down to (40 + 30) + (7 + 6).
+            </p>
+
+            <p class="description-text">
+                Round numbers to the nearest ten or hundred to make calculations easier, then adjust your final answer. 
+                For example, if calculating 29 + 47, round to 30 + 50 and then subtract the 1 + 3.
+            </p>
+            <p class="description-text">
+                Visualize numbers on a number line. This helps visualize the gaps between numbers. 
+                Moreover, recognize and use patterns in numbers, such as how multiplying by 9 creates a predictable set of results or how adding zeros affects values. 
+            </p>
+        </div>
+
+        <div class="rules-section-container">
+            <label class="label rules">Special Thanks</label>
+            <p class="description-text">
+                Before you leave, I want to direct your attention to the reason BetaMac exists. 
+                BetaMac was birthed out of the idea for the multiplayer zetamac, which is an already amazing tool to improve mental math skills.
+                Be sure to check out zetamac whenever you get the chance. You can visit them <a target="blank" class="visit-link" href="https://arithmetic.zetamac.com/">Here</a>.
+            </p>
+        </div>
+
+    </main>
+</body>
+</html>

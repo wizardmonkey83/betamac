@@ -1,0 +1,33 @@
+.rules-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.rules-section-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.label.rules {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-right: .5rem;
+    margin-top: 1rem;
+}
+
+.header.rules {
+    margin-bottom: .5rem;
+    font-size: 1.5rem;
+    color: #cf9905;
+    margin-top: 2rem;
+}
+
+.visit-link {
+    color: #cf9905;
+}

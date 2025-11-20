@@ -19,7 +19,7 @@
         <div class="logo"><a href="{% url 'index' %}">BetaMac</a></div>
         <nav class="main-nav">
             <ul>
-                <li><a href="">How to Play</a></li>
+                <li><a href="{% url 'load_rules' %}">How to Play</a></li>
             </ul>
         </nav>
     </header>
@@ -60,10 +60,6 @@
             </div>
         </form>
     </main>
-
-    <footer>
-        <div class="logo footer"><a href="{% url 'index' %}">Coming Soon</a></div>
-    </footer>
     <script>
         // changes duration ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const durationSelector = document.getElementById("duration-selector");
