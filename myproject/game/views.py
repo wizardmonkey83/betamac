@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.conf import settings
 from .forms import PassRangeParameters, PassHostParameters, Joinlobby
@@ -126,6 +126,7 @@ def host_game(request):
                 # seconds
                 r.expire(f"game:{lobby_code}:config", 630)
                 return HttpResponseRedirect(reverse("start_game", args=[lobby_code]))
+            # exists
             else:
                 lobby_code = ""
                 characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -172,7 +173,9 @@ def join_game(request):
             exists = r.exists(f"game:{lobby_code}:config")
 
             if exists:
-                return HttpResponseRedirect(reverse("start_game", args=[lobby_code]))
+                # response to provide to the htmx header. its contents dont matter
+                response = HttpResponse("Login Successful")
+                response['HX-Redirect'] = reverse("start_game", args=[lobby_code])
             else:
                 form.add_error(None, "Invalid login code.")
         

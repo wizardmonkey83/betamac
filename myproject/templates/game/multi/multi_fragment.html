@@ -1,31 +1,33 @@
-<form>
-    <div id="hosting-tabs" class="game-mode-tabs">
-        <button type="button" class="game-mode-tab active" hx-get="{% url 'load_join' %}" hx-target="#hosting-method-container" hx-swap="innerHTML">Join Game</button>
-        <button type="button" class="game-mode-tab" hx-get="{% url 'load_host' %}" hx-target="#hosting-method-container" hx-swap="innerHTML">Host Game</button>
-        {% csrf_token %}
-    </div>
-</form>
-<div id="hosting-method-container" class="hosting-method-container">
-    <form method="POST" action="{% url 'join_game' %}">
-        <div class="join-container">
-            <div class="join-details-container">
-                <label class="label duration">Enter Code</label>
-                {{ form.lobby_code }}
-            </div>
-
-            {% if form.errors %}
-                <div class="form-errors">
-                    {% for field, error_list in form.errors.items %}
-                        {% for error in error_list %}
-                            <p class="error-message">{{ error }}</p>
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-            {% endif %}
+<div id="multi-game-interface">
+    <form>
+        <div id="hosting-tabs" class="game-mode-tabs">
+            <button type="button" class="game-mode-tab active" hx-get="{% url 'load_join' %}" hx-target="#hosting-method-container" hx-swap="innerHTML">Join Game</button>
+            <button type="button" class="game-mode-tab" hx-get="{% url 'load_host' %}" hx-target="#hosting-method-container" hx-swap="innerHTML">Host Game</button>
             {% csrf_token %}
-            <button type="submit" id="join-lobby-button" class="submit-btn">Join</button>
         </div>
     </form>
+    <div id="hosting-method-container" class="hosting-method-container">
+        <form hx-post="{% url 'join_game' %}" hx-target="#multi-game-interface" hx-swap="outerHTML">
+            <div class="join-container">
+                <div class="join-details-container">
+                    <label class="label duration">Enter Code</label>
+                    {{ form.lobby_code }}
+                </div>
+
+                {% if form.errors %}
+                    <div class="form-errors">
+                        {% for field, error_list in form.errors.items %}
+                            {% for error in error_list %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% csrf_token %}
+                <button type="submit" id="join-lobby-button" class="submit-btn">Join</button>
+            </div>
+        </form>
+    </div>
 </div>
 <script>
     {

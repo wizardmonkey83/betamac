@@ -171,12 +171,3 @@ input::-webkit-inner-spin-button {
 }
 
 
-.form-errors {
-    margin-bottom: 1rem;
-}
-.error-message {
-    color: #FF375F;
-    font-family: inherit;
-    font-size: 0.9rem;
-    margin: 0.5rem 0;
-}

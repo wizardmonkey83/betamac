@@ -1,4 +1,4 @@
-<form method="POST" action="{% url 'join_game' %}">
+<form hx-post="{% url 'join_game' %}" hx-target="#multi-game-interface" hx-swap="outerHTML">
     <div class="join-container">
         <div class="join-details-container">
             <label class="label duration">Enter Code</label>

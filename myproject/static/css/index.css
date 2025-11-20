@@ -271,3 +271,13 @@ input:checked + .slider:before {
     margin-top: 1rem;
 
 }
+
+.form-errors {
+    margin-bottom: .1rem;
+}
+
+.error-message {
+    color: #FF375F;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
