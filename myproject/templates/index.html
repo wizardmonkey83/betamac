@@ -61,14 +61,6 @@
         </form>
     </main>
     <script>
-        // changes duration ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        const durationSelector = document.getElementById("duration-selector");
-        durationSelector.onchange = function changeDuration() {
-            const hiddenDuration = document.getElementById("duration_selector");
-            const selectedOption = durationSelector.options[durationSelector.selectedIndex];
-            hiddenDuration.value = selectedOption.value;
-        }
-
         // switch active status -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const gameModeTabs = document.getElementById("game-mode-tabs");
         if (gameModeTabs) {

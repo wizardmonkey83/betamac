@@ -55,7 +55,7 @@
         let countdownRunStatus = true;
         const countdownDisplay = document.getElementById("countdown");
         if (countdownRunStatus) {
-            let countdownTime = "{{ duration }}";
+            let countdownTime = parseInt("{{ duration }}", 10);
             let countdownInterval;
             const updateCountdown = () => {
                 if (countdownTime >= 0) {

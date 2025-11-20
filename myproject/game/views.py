@@ -30,7 +30,9 @@ def pass_range_parameters(request):
 
             distractions_enabled = form.cleaned_data["distractions_enabled"]
 
-            duration_selector = form.cleaned_data["duration_selector"]
+            # bandaid
+            duration = request.POST.get('duration_selector')
+            print(f"DURATION: {duration}")
 
             allowed_operations = []
             if addition_enabled:
@@ -53,7 +55,7 @@ def pass_range_parameters(request):
                 "multiplication_right_min": multiplication_right_min,
                 "multiplication_right_max": multiplication_right_max,
 
-                "duration": duration_selector,
+                "duration": duration,
                 "distractions": distractions_enabled,
 
                 "allowed_operations": allowed_operations,
@@ -86,7 +88,7 @@ def host_game(request):
 
             distractions_enabled = form.cleaned_data["distractions_enabled"]
 
-            duration_selector = form.cleaned_data["duration_selector"]
+            duration = request.POST.get('duration_selector')
 
             lobby_code = form.cleaned_data["lobby_code"]
 
@@ -116,7 +118,7 @@ def host_game(request):
                     "multiplication_right_min": multiplication_right_min,
                     "multiplication_right_max": multiplication_right_max,
 
-                    "duration": duration_selector,
+                    "duration": duration,
                     "distractions": distractions_enabled,
 
                     "allowed_operations": json.dumps(allowed_operations),
@@ -202,6 +204,3 @@ def load_host(request):
 
 def load_rules(request):
     return render(request, "rules.html")
-            
-
-
