@@ -22,16 +22,16 @@
                 <div class="logo game">Seconds Left:<div class="logo countdown" id="countdown">...</div></div>
                 {% csrf_token %}
             </form>
-            </div>
+        </div>
         <nav class="main-nav">
             <ul>
-                <div class="score-container game">
+                <div class="score-container game-multi">
                     <li id="label-a">Your Score:</li>
                     <li class="score-value" id="score_a">0</li>
                 </div>
             </ul>
             <ul>
-                <div class="score-container game">
+                <div class="score-container game-multi">
                     <li id="label-b">Opponents Score:</li>
                     <li class="score-value" id="score_b">0</li>
                 </div>
@@ -41,15 +41,14 @@
     <main class="game-container">
 
         <div id="game-banner" class="game-banner">
-            <div id="active-game-ui">
-                <h1 class="header game" id="equation-box"></h1>
+            <div class="active-game-ui" id="active-game-ui">
+                <h1 class="header game" id="equation-box">Waiting</h1>
                 <input class="user-input game" type="number" id="user-input-game">
             </div>
 
             <div id="results-ui" class="results-container multi">
-                <div class="header-container results">
-                    <div class="logo score">Your Score: <div id="final-score-a" class="header score"></div></div>
-                    <div class="logo score">Opponent's Score: <div id="final-score-b" class="header score"></div></div>
+                <div class="header-container results-multi">
+                    <div class="logo score">Game Over</div>
                 </div>
                 <div class="link-container">
                     <a class="link left" onclick="rematch()">Rematch</a>
@@ -186,11 +185,6 @@
 
                 document.getElementById("active-game-ui").style.display = "none";
                 document.getElementById("results-ui").style.display = "flex";
-
-                const finalScoreADiv = document.getElementById("final-score-a");
-                const finalScoreBDiv = document.getElementById("final-score-b");
-                finalScoreADiv.innerHTML = finalScoreA;
-                finalScoreBDiv.innerHTML = finalScoreB;
             }
         }
         

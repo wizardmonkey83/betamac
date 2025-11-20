@@ -86,7 +86,11 @@ def host_game(request):
             multiplication_enabled = form.cleaned_data["multiplication_enabled"]
             division_enabled = form.cleaned_data["division_enabled"]
 
-            distractions_enabled = form.cleaned_data["distractions_enabled"]
+            # distractions_enabled = form.cleaned_data["distractions_enabled"]
+            # if distractions_enabled:
+               #  distractions_enabled = "active"
+            # else:
+                # distractions_enabled = "inactive"
 
             duration = request.POST.get('duration_selector')
 
@@ -119,7 +123,7 @@ def host_game(request):
                     "multiplication_right_max": multiplication_right_max,
 
                     "duration": duration,
-                    "distractions": distractions_enabled,
+                    # "distractions": distractions_enabled,
 
                     "allowed_operations": json.dumps(allowed_operations),
                 })
@@ -149,7 +153,7 @@ def host_game(request):
                     "multiplication_right_max": multiplication_right_max,
 
                     "duration": duration,
-                    "distractions": distractions_enabled,
+                    # "distractions": distractions_enabled,
 
                     "allowed_operations": json.dumps(allowed_operations),
                     })
@@ -176,6 +180,7 @@ def join_game(request):
                 # response to provide to the htmx header. its contents dont matter
                 response = HttpResponse("Login Successful")
                 response['HX-Redirect'] = reverse("start_game", args=[lobby_code])
+                return response
             else:
                 form.add_error(None, "Invalid login code.")
         

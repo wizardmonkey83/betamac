@@ -67,13 +67,6 @@
                 Multiplication problems in reverse.
             </p>
         </div>
-        <div class="header-container arithmetic-type">
-            <label class="label duration">Distractions</label>
-            <label class="switch">
-                <input type="checkbox" name="distractions_enabled">
-                <span class="slider round"></span>
-            </label>
-        </div>
         <div id="duration-container" class="duration-container">
             <div class="left-side index">
                 <label class="label duration">Duration: </label> 
@@ -92,7 +85,7 @@
                 <span id="lobby-code" class="label lobby-code"></span>
             </div>
             {% csrf_token %}
-            <input type="hidden" name="lobby-code" id="lobby-code-input" value="">
+            <input type="hidden" name="lobby_code" id="lobby-code-input" value="">
             <button type="submit" id="host-lobby-button" class="submit-btn">Host</button>
         </div>
     </div>

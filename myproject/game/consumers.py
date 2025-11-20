@@ -72,8 +72,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             "multiplication_right_min": parameters["multiplication_right_min"],
             "multiplication_right_max": parameters["multiplication_right_max"],
 
-            "duration": parameters["duration_selector"],
-            "distractions": parameters["distractions_enabled"],
+            "duration": parameters["duration"],
 
             "allowed_operations": parameters["allowed_operations"],
 
@@ -121,6 +120,8 @@ class GameConsumer(AsyncWebsocketConsumer):
             curr_score_a = await r.hget(self.redis_game_key, "score_A")
             curr_score_b = await r.hget(self.redis_game_key, "score_B")
             if curr_score_a > curr_score_b:
+                print(f"CURR SCORE A {curr_score_a}")
+                print(f"CURR SCORE B {curr_score_b}")
                 winner = "player_A_channel"
             elif curr_score_b > curr_score_a:
                 winner = "player_B_channel"
