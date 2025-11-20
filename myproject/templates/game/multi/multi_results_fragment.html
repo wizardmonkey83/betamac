@@ -1,0 +1,23 @@
+<div class="results-container solo">
+    <div class="header-container results">
+        <div class="logo score">Your Score: <div id="final-score-a" class="header score"></div></div>
+        <div class="logo score">Opponent's Score: <div id="final-score-b" class="header score"></div></div>
+    </div>
+    <div class="link-container">
+        <a class="link left" onclick="rematch()">Rematch</a>
+        <a class="link" href="/">Back to Home</a>
+    </div>
+</div>
+<script>
+    const finalScoreADiv = document.getElementById("final-score-a");
+    const finalScoreBDiv = document.getElementById("final-score-b");
+    finalScoreADiv.innerHTML = finalScoreA;
+    finalScoreBDiv.innerHTML = finalScoreB;
+
+    function rematch() {
+        gameSocket.send(JSON.stringify({
+            "type": "rematch_request",
+            "role": "rematch",
+        }));
+}
+</script>

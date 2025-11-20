@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.conf import settings
 from .forms import PassRangeParameters, PassHostParameters, Joinlobby
 import redis
 import random
+import json
+
 
 # Create your views here.
 def pass_range_parameters(request):
@@ -74,7 +77,8 @@ def load_multi(request):
     return render(request, "game/multi/multi_fragment.html")
 
 def load_join(request):
-    return render(request, "game/multi/join_fragment.html")
+    form = Joinlobby()
+    return render(request, "game/multi/join_fragment.html", {"form": form})
 
 def load_host(request):
     parameter_form = PassRangeParameters()
@@ -115,12 +119,12 @@ def host_game(request):
             if division_enabled:
                 allowed_operations.append('/')
 
-            r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-            exists = r.exists(f"game_{lobby_code}")
+            r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, decode_responses=True)
+            exists = r.exists(f"game:{lobby_code}:config")
 
             if not exists:
                 # send all parameters to the unique lobby
-                r.hset(f"game_{lobby_code}", mapping={
+                r.hset(f"game:{lobby_code}:config", mapping={
                     "addition_left_min": addition_left_min,
                     "addition_left_max": addition_left_max,
                     "addition_right_min": addition_right_min,
@@ -134,16 +138,10 @@ def host_game(request):
                     "duration": duration_selector,
                     "distractions": distractions_enabled,
 
-                    "allowed_operations": allowed_operations,
-
-                    "player_A_channel": None,
-                    "player_B_channel": None,
-
-                    "score_A": None,
-                    "score_B": None
+                    "allowed_operations": json.dumps(allowed_operations),
                 })
                 # seconds
-                r.expire(f"game_{lobby_code}", 650)
+                r.expire(f"game:{lobby_code}:config", 630)
                 return HttpResponseRedirect(reverse("start_game", args=[lobby_code]))
             else:
                 lobby_code = ""
@@ -152,9 +150,10 @@ def host_game(request):
                 while i < 6:
                     random_index = random.randint(0, len(characters) - 1)
                     lobby_code += characters[random_index]
-                second_exists = r.exists(f"game_{lobby_code}")
+                    i += 1
+                second_exists = r.exists(f"game:{lobby_code}:config")
                 if not second_exists:
-                    r.hset(f"game_{lobby_code}", mapping={
+                    r.hset(f"game:{lobby_code}:config", mapping={
                     "addition_left_min": addition_left_min,
                     "addition_left_max": addition_left_max,
                     "addition_right_min": addition_right_min,
@@ -168,16 +167,10 @@ def host_game(request):
                     "duration": duration_selector,
                     "distractions": distractions_enabled,
 
-                    "allowed_operations": allowed_operations,
-
-                    "player_A_channel": None,
-                    "player_B_channel": None,
-
-                    "score_A": None,
-                    "score_B": None
+                    "allowed_operations": json.dumps(allowed_operations),
                     })
                     # seconds
-                    r.expire(f"game_{lobby_code}", 650)
+                    r.expire(f"game:{lobby_code}:config", 630)
                     return HttpResponseRedirect(reverse("start_game", args=[lobby_code]))
                 else:
                     # ur cooked pal
@@ -192,14 +185,17 @@ def join_game(request):
         if form.is_valid():
             lobby_code = form.cleaned_data["lobby_code"]
             # port subject to change
-            r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-            exists = r.exists(f"game_{lobby_code}")
+            r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, decode_responses=True)
+            exists = r.exists(f"game:{lobby_code}:config")
 
-            if not exists:
+            if exists:
                 return HttpResponseRedirect(reverse("start_game", args=[lobby_code]))
             else:
-                # end it all
-                return None
+                form.add_error(None, "Invalid login code.")
+        
+    else:
+        form = Joinlobby()
+    return render(request, "game/multi/join_fragment.html", {"form": form})
 
 
 

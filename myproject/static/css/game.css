@@ -125,6 +125,13 @@ input::-webkit-inner-spin-button {
     justify-content: center;
 }
 
+.results-container.solo {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .link-container {
     display: flex;
     flex-direction: row;
@@ -155,4 +162,15 @@ input::-webkit-inner-spin-button {
 
 .header.score {
     margin-left: 1rem;
+}
+
+
+.form-errors {
+    margin-bottom: 1rem;
+}
+.error-message {
+    color: #FF375F;
+    font-family: inherit;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
 }

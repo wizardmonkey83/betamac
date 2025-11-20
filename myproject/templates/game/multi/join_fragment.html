@@ -2,8 +2,18 @@
     <div class="join-container">
         <div class="join-details-container">
             <label class="label duration">Enter Code</label>
-            <input type="text" class="lobby-input" id="lobby-input" name="lobby_input" required>
+            {{ form.lobby_code }}
         </div>
+
+        {% if form.errors %}
+            <div class="form-errors">
+                {% for field, error_list in form.errors.items %}
+                    {% for error in error_list %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
         {% csrf_token %}
         <button type="submit" id="join-lobby-button" class="submit-btn">Join</button>
     </div>

@@ -19,20 +19,20 @@
         <div class="header-container game">
             <form>
                 <!-- this method of hx-trigger may pose an issue. but only if the user clicks the seconds and that would ruin their session -->
-                <div class="logo game">Seconds Left:<div hx-get="{% url 'show_game_results' %}" hx-trigger="click" hx-target="#game-banner" hx-replace="innerHTML" class="logo countdown" id="countdown">{{ duration }}</div></div>
+                <div class="logo game">Seconds Left:<div class="logo countdown" id="countdown">...</div></div>
                 {% csrf_token %}
             </form>
             </div>
         <nav class="main-nav">
             <ul>
                 <div class="score-container game">
-                    <li>Your Score:</li>
+                    <li id="label-a">Your Score:</li>
                     <li class="score-value" id="score_a">0</li>
                 </div>
             </ul>
             <ul>
                 <div class="score-container game">
-                    <li>Opponents Score:</li>
+                    <li id="label-b">Opponents Score:</li>
                     <li class="score-value" id="score_b">0</li>
                 </div>
             </ul>
@@ -41,19 +41,43 @@
     <main class="game-container">
 
         <div id="game-banner" class="game-banner">
-            <h1 class="header game" id="equation-box"></h1>
-            <input class="user-input game" type="number" id="user-input-game">
+            <div id="active-game-ui">
+                <h1 class="header game" id="equation-box"></h1>
+                <input class="user-input game" type="number" id="user-input-game">
+            </div>
+
+            <div id="results-ui" class="results-container solo">
+                <div class="header-container results">
+                    <div class="logo score">Your Score: <div id="final-score-a" class="header score"></div></div>
+                    <div class="logo score">Opponent's Score: <div id="final-score-b" class="header score"></div></div>
+                </div>
+                <div class="link-container">
+                    <a class="link left" onclick="rematch()">Rematch</a>
+                    <a class="link" href="/">Back to Home</a>
+                </div>
+            </div>
+            <script>
+                function rematch() {
+                    gameSocket.send(JSON.stringify({
+                        "type": "rematch_request",
+                        "status": "rematch",
+                    }));
+            }
+            </script>
         </div>
     </main>
     {% if distractions %}
         <audio id="audio-player" src="" loop="loop"></audio>
     {% endif %}
 
-    {{ allowed_operations|json_script:"allowed-operations-json" }}
     {{ lobby_code|json_script:"lobby-code" }}
     <script>
+        let winner = "";
+        let finalScoreA = 0;
+        let finalScoreB = 0;
+
         // start websocket -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        const lobbyCode = document.getElementById("lobby-code").textContent;
+        const lobbyCode = JSON.parse(document.getElementById("lobby-code").textContent);
         const gameSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -62,39 +86,40 @@
             + '/'
         );
 
-        // handle incoming scores -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        const opponentsScore = document.getElementById("score_b");
-        gameSocket.onmessage() = function(e) {
-            const data = JSON.parse(e.data);
-            // assumes that score is held within a dictionary
-            opponentsScore.innerText = data.score;
-        };
-
-        gameSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
-        
         
         // countdown timer -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         let countdownRunStatus = true;
-        const countdownDisplay = document.getElementById("countdown");
-        if (countdownRunStatus) {
-            let countdownTime = "{{ duration }}";
-            let countdownInterval;
-            const updateCountdown = () => {
-                if (countdownTime >= 0) {
-                    countdownDisplay.textContent = countdownTime;
-                    countdownTime--;
-                }  else if (countdownTime < 0) {
-                    countdownRunStatus = false;
-                    countdownDisplay.click();
-                    clearInterval(countdownInterval);
-                }
-            }; 
-            countdownInterval = setInterval(updateCountdown, 1000);
+        let duration = 120;
+        function startTimer() {
+            countdownRunStatus = true;
+            const countdownDisplay = document.getElementById("countdown");
+            if (countdownRunStatus) {
+                let countdownTime = duration;
+                let countdownInterval;
+                const updateCountdown = () => {
+                    if (countdownTime >= 0) {
+                        countdownDisplay.textContent = countdownTime;
+                        countdownTime--;
+                    }  else if (countdownTime < 0) {
+                        countdownRunStatus = false;
+                        clearInterval(countdownInterval);
+
+                        gameSocket.send(JSON.stringify({
+                            "type": "game_end",
+                            "status": "over",
+                        }));
+                    }
+                }; 
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
         }
 
         // generate problems -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        let myRole = "";
+
+        const labelA = document.getElementById("label-a");
+        const labelB = document.getElementById("label-b");
+        
         let addition_left_min = 2;
         let addition_left_max = 100;
         let addition_right_min = 2;
@@ -104,11 +129,21 @@
         let multiplication_left_max = 12;
         let multiplication_right_min = 2;
         let multiplication_right_max = 100;
+
+        let operations = [];
     
+        const scoreA = document.getElementById("score_a");
+        const scoreB = document.getElementById("score_b");
+
+        // all incoming messages routed through here
         gameSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
 
+            // start game ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             if (data["type"] == "game_config") {
+                document.getElementById("active-game-ui").style.display = "flex";
+                document.getElementById("results-ui").style.display = "none";
+
                 addition_left_min = parseInt(data["addition_left_min"], 10);
                 addition_left_max = parseInt(data["addition_left_max"], 10);
                 addition_right_min = parseInt(data["addition_right_min"], 10);
@@ -118,10 +153,44 @@
                 multiplication_left_max = parseInt(data["multiplication_left_max"], 10);
                 multiplication_right_min = parseInt(data["multiplication_right_min"], 10);
                 multiplication_right_max = parseInt(data["multiplication_right_max"], 10);
-            } else if (data["type"] == "score_update") {
 
+                operations = JSON.parse(data["allowed_operations"]);
+
+                duration = parseInt(data["duration"], 10);
+
+                myRole = data["player_role"];
+
+                if (myRole === "A") {
+                    labelA.innerText = "Your Score:";
+                    labelB.innerText = "Opponent:";
+                } else if (myRole === "B") {
+                    labelA.innerText = "Opponent:";
+                    labelB.innerText = "Your Score:";
+                }
+                produceEquation();
+                startTimer();
+
+            // score update ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            } else if (data["type"] == "score_update") {
+                let curr_score_a = data["score_a"];
+                let curr_score_b = data["score_b"];
+
+                scoreA.innerText = curr_score_a;
+                scoreB.innerText = curr_score_b;
+
+            // end game -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             } else if (data["type"] == "game_end") {
-                
+                finalScoreA = data["score_a"];
+                finalScoreB = data["score_b"];
+                winner = data["winner"];
+
+                document.getElementById("active-game-ui").style.display = "none";
+                document.getElementById("results-ui").style.display = "flex";
+
+                const finalScoreADiv = document.getElementById("final-score-a");
+                const finalScoreBDiv = document.getElementById("final-score-b");
+                finalScoreADiv.innerHTML = finalScoreA;
+                finalScoreBDiv.innerHTML = finalScoreB;
             }
         }
         
@@ -138,7 +207,6 @@
             let multiplication_num1 = getRandomInt(multiplication_left_min, multiplication_left_max);
             let multiplication_num2 = getRandomInt(multiplication_right_min, multiplication_right_max);
 
-            let operations = JSON.parse(document.getElementById("allowed-operations-json").textContent);
             let operation = operations[Math.floor(Math.random() * operations.length)];
 
             switch (operation) {
@@ -170,35 +238,26 @@
         
         // check answer ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const inputBox = document.getElementById("user-input-game");
-        let scoreB = document.getElementById("score_b");
-        let score = 0;
         inputBox.addEventListener("input", () =>  {
             // correct answer
             if (parseInt(inputBox.value, 10) === answer) {
-                const scoreHeader = document.getElementById("score_a");
-                score += 1;
-                scoreHeader.innerHTML = "";
-                scoreHeader.innerHTML = `${score}`;
                 inputBox.value = "";
 
-                // think this is the right place for this
-                chatSocket.send(JSON.stringify({
-                    // sends the current users score. not sure how im going to assign these
-                    'score_a': score_a,
-                    'score_b': score_b,
-                    // think this works....
-                    'time': countdownDisplay.textContent,
+                // send score update
+                gameSocket.send(JSON.stringify({
+                    "type": "score_update",
+                    "status": "correct",
                 }));
 
                 produceEquation();
             }
         });
-        produceEquation();
+        
 
         // play random noise ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const audioFiles = [
             "{% static 'sounds/birds-chirping.mp3' %}",
-            "{% static 'sounds/sounds/car-alarm.mp3' %}",
+            "{% static 'sounds/car-alarm.mp3' %}",
             "{% static 'sounds/people-talking.mp3' %}",
             "{% static 'sounds/heavy-rainfall.mp3' %}",
             "{% static 'sounds/gunshots.mp3' %}",

@@ -53,12 +53,15 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'message': 'active'
                 }
             )
+        # so that rematches dont time out
+        await r.expire(f"game:{self.lobby_code}:config", 630)
 
     async def game_start(self, message):
         # send parameters to multi_game.html
         parameters = await r.hgetall(self.redis_game_key)
 
         payload = {
+            "type": "game_config",
             "addition_left_min": parameters["addition_left_min"],
             "addition_left_max": parameters["addition_left_max"],
             "addition_right_min": parameters["addition_right_min"],
@@ -73,7 +76,10 @@ class GameConsumer(AsyncWebsocketConsumer):
             "distractions": parameters["distractions_enabled"],
 
             "allowed_operations": parameters["allowed_operations"],
+
+            "player_role": self.player_role
         }
+        await r.expire(f"game:{self.lobby_code}:config", 630)
         await self.send(text_data=json.dumps(payload))
 
 
@@ -82,15 +88,87 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_code, self.channel_name)
 
-    # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        score_a = text_data_json["score_a"]
+        # this is isolated to the user whos frontend send the data back
+        if text_data_json["type"] == "score_update":
+            curr_score_a = await r.hget(self.redis_game_key, "score_A")
+            curr_score_b = await r.hget(self.redis_game_key, "score_B")
+            if self.player_role == "A":
+                if text_data_json["status"] == "correct":
+                    curr_score_a = int(curr_score_a or 0) + 1
+                elif text_data_json["status"] == "reset":
+                    curr_score_a = 0
+                await r.hset(self.redis_game_key, 'score_A', curr_score_a)
+            else:
+                if text_data_json["status"] == "correct":
+                    curr_score_b = int(curr_score_b or 0) + 1
+                elif text_data_json["status"] == "reset":
+                    curr_score_b = 0
+                await r.hset(self.redis_game_key, 'score_B', curr_score_b)
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_code, {"type": "chat.message", "score_a": score_a}
-        )
+            # Send message to room group
+            await self.channel_layer.group_send(
+                self.room_group_code, 
+                {
+                    "type": "score.update", 
+                    "score_a": curr_score_a,
+                    "score_b": curr_score_b
+                }
+            )
+
+        elif text_data_json["type"] == "game_end":
+            curr_score_a = await r.hget(self.redis_game_key, "score_A")
+            curr_score_b = await r.hget(self.redis_game_key, "score_B")
+            if curr_score_a > curr_score_b:
+                winner = "player_A_channel"
+            elif curr_score_b > curr_score_a:
+                winner = "player_B_channel"
+            else:
+                winner = "tie"
+
+            await self.channel_layer.group_send(
+                self.room_group_code, 
+                {
+                    "type": "game.end", 
+                    "score_a": curr_score_a,
+                    "score_b": curr_score_b,
+                    "winner": winner
+                }
+            )
+
+        elif text_data_json["type"] == "rematch_request":
+            await r.hset(self.redis_game_key, 'score_A', 0)
+            await r.hset(self.redis_game_key, 'score_B', 0)
+
+            await self.channel_layer.group_send(
+                self.room_group_code,
+                {
+                    "type": "score.update",
+                    "score_a": 0,
+                    "score_b": 0
+                }
+            )
+
+            await self.channel_layer.group_send(
+                self.room_group_code,
+                {
+                    'type': 'game.start',
+                    'message': 'active'
+                }
+            )
+
+
+    async def score_update(self, message):
+        score_a = message["score_a"]
+        score_b = message["score_b"]
+        await self.send(text_data=json.dumps({"type": "score_update", "score_a": score_a, "score_b": score_b}))
+
+    async def game_end(self, message):
+        score_a = message["score_a"]
+        score_b = message["score_b"]
+        winner = message["winner"]
+        await self.send(text_data=json.dumps({"type": "game_end", "score_a": score_a, "score_b": score_b, "winner": winner}))
 
     # Receive message from room group
     async def chat_message(self, event):

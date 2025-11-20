@@ -44,5 +44,5 @@ class PassHostParameters(forms.Form):
     lobby_code = forms.CharField(required=True)
 
 class Joinlobby(forms.Form):
-    lobby_code = forms.CharField(required=True)
+    lobby_code = forms.CharField(required=True, widget=forms.TextInput(attrs={"class": "lobby-input"}))
 
