@@ -178,7 +178,7 @@ def join_game(request):
         
     else:
         form = Joinlobby()
-    return render(request, "game/multi/join_fragment.html", {"form": form})
+    return render(request, "game/multi/multi_fragment.html", {"form": form})
 
 
 
