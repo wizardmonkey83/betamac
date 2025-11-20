@@ -32,28 +32,21 @@
                 {% csrf_token %}
             </div>
         </form>
-        <form method="POST" action="{% url 'pass_range_parameters' %}" >
-            {% csrf_token %}
-            <div class="instruction-container index">
-                <div class="upper-container index">
-                    <h1 class="header index">Arithmetic Game</h1>
-                    <div class="header-container arithmetic-type">
-                        <label class="label duration">Distractions</label>
-                        <label class="switch">
-                            <input type="checkbox" name="distractions_enabled">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </div>
-                <p class="description-text index">
-                    The Arithmetic Game is a fast-paced speed drill where you are given two minutes to solve as many arithmetic problems as you can.
-                </p>
-                <p class="description-text index">
-                    If you have questions, consult the BetaMac "How to Play" page.
-                </p>
+        
+        <div class="instruction-container index">
+            <div class="upper-container index">
+                <h1 class="header index">Arithmetic Game</h1>
             </div>
+            <p class="description-text index">
+                The Arithmetic Game is a fast-paced speed drill where you are given two minutes to solve as many arithmetic problems as you can.
+            </p>
+            <p class="description-text index">
+                If you have questions, consult the BetaMac "How to Play" page.
+            </p>
+        </div>
             
-
+        <form method="POST" action="{% url 'pass_range_parameters' %}">
+            {% csrf_token %}
             <!-- when the user boots up the'll see this. -->
             <div id="mode" class="arithmetic-type-container">
                 {% include "game/solo/solo_fragment.html" %}

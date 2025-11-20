@@ -147,7 +147,7 @@ def host_game(request):
                     "multiplication_right_min": multiplication_right_min,
                     "multiplication_right_max": multiplication_right_max,
 
-                    "duration": duration_selector,
+                    "duration": duration,
                     "distractions": distractions_enabled,
 
                     "allowed_operations": json.dumps(allowed_operations),
