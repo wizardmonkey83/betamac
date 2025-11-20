@@ -92,23 +92,27 @@
     </div>
 </form>
 <script>
-    // generate lobby code ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    const lobbyCodeContainer = document.getElementById("lobby-code");
-    function generateLobbyCode() {
-        let lobbyCode = "";
-        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        for (let i = 0; i < 6; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            lobbyCode += characters.charAt(randomIndex);
+    // used to define a block scope to fix the issue of declaring consts multiple times.
+    {
+        // generate lobby code ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const lobbyCodeContainer = document.getElementById("lobby-code");
+        function generateLobbyCode() {
+            let lobbyCode = "";
+            let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            for (let i = 0; i < 6; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                lobbyCode += characters.charAt(randomIndex);
+            }
+            console.log("LOBBY CODE: " + lobbyCode);
+            lobbyCodeContainer.innerText = lobbyCode;
         }
-        lobbyCodeContainer.innerText = lobbyCode;
-    }
-    generateLobbyCode();
+        generateLobbyCode();
 
-    // pass lobby code to view -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    const hostButton = document.getElementById("host-lobby-button");
-    hostButton.addEventListener("click", () => {
-        const lobbyCodeInput = document.getElementById("lobby-code-input");
-        lobbyCodeInput.value = lobbyCodeContainer.innerText;
-    })
+        // pass lobby code to view -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const hostButton = document.getElementById("host-lobby-button");
+        hostButton.addEventListener("click", () => {
+            const lobbyCodeInput = document.getElementById("lobby-code-input");
+            lobbyCodeInput.value = lobbyCodeContainer.innerText;
+        })
+    }
 </script>

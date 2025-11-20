@@ -9,16 +9,18 @@
     {% include "game/multi/join_fragment.html" %}
 </div>
 <script>
-    const hostingTabs = document.getElementById("hosting-tabs");
-    if (hostingTabs) {
-        hostingTabs.addEventListener('click', function(e) {
-            if (e.target.tagName === 'BUTTON') {
-                const buttons = hostingTabs.querySelectorAll('button');
-                buttons.forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                e.target.classList.add('active');
-            }
-        });
+    {
+        const hostingTabs = document.getElementById("hosting-tabs");
+        if (hostingTabs) {
+            hostingTabs.addEventListener('click', function(e) {
+                if (e.target.tagName === 'BUTTON') {
+                    const buttons = hostingTabs.querySelectorAll('button');
+                    buttons.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    e.target.classList.add('active');
+                }
+            });
+        }
     }
 </script>

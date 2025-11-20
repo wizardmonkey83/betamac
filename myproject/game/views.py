@@ -189,7 +189,8 @@ def load_solo(request):
     return render(request, "game/solo/solo_fragment.html", {"form": form})
 
 def load_multi(request):
-    return render(request, "game/multi/multi_fragment.html")
+    form = Joinlobby()
+    return render(request, "game/multi/multi_fragment.html", {"form": form})
 
 def load_join(request):
     form = Joinlobby()
