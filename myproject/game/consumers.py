@@ -6,11 +6,7 @@ from django.conf import settings
 
 
 # connect to the redis db
-try:
-    r = aredis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, decode_responses=True)
-except:
-    # quit life
-    r = None
+r = aredis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, decode_responses=True)
 
 class GameConsumer(AsyncWebsocketConsumer):
     # is called automatically when the websocket connection is made on multi_game
