@@ -113,11 +113,13 @@ class GameConsumer(AsyncWebsocketConsumer):
             )
 
         elif text_data_json["type"] == "game_end":
-            curr_score_a = await r.hget(self.redis_game_key, "score_A")
-            curr_score_b = await r.hget(self.redis_game_key, "score_B")
+            raw_score_a = await r.hget(self.redis_game_key, "score_A")
+            raw_score_b = await r.hget(self.redis_game_key, "score_B")
+
+            curr_score_a = int(raw_score_a) if raw_score_a else 0
+            curr_score_b = int(raw_score_b) if raw_score_b else 0
+
             if curr_score_a > curr_score_b:
-                print(f"CURR SCORE A {curr_score_a}")
-                print(f"CURR SCORE B {curr_score_b}")
                 winner = "player_A_channel"
             elif curr_score_b > curr_score_a:
                 winner = "player_B_channel"
