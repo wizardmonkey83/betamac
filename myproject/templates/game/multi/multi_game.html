@@ -78,8 +78,10 @@
 
         // start websocket -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const lobbyCode = JSON.parse(document.getElementById("lobby-code").textContent);
+        // issue loading multiplayer mode using https. this should solve it
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
         const gameSocket = new WebSocket(
-            'ws://'
+            protocol
             + window.location.host
             + '/ws/game/'
             + lobbyCode
