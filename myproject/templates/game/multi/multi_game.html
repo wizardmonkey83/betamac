@@ -51,7 +51,7 @@
                     <div class="logo score">Game Over</div>
                 </div>
                 <div class="link-container">
-                    <a class="link left" onclick="rematch()">Rematch</a>
+                    <div class="link left" onclick="rematch()">Rematch</div>
                     <a class="link" href="/">Back to Home</a>
                 </div>
             </div>
@@ -74,6 +74,7 @@
         let winner = "";
         let finalScoreA = 0;
         let finalScoreB = 0;
+        let countdownInterval;
 
         // start websocket -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         const lobbyCode = JSON.parse(document.getElementById("lobby-code").textContent);
@@ -90,11 +91,11 @@
         let countdownRunStatus = true;
         let duration = 120;
         function startTimer() {
+            if (countdownInterval) clearInterval(countdownInterval);
             countdownRunStatus = true;
             const countdownDisplay = document.getElementById("countdown");
             if (countdownRunStatus) {
                 let countdownTime = duration;
-                let countdownInterval;
                 const updateCountdown = () => {
                     if (countdownTime >= 0) {
                         countdownDisplay.textContent = countdownTime;
@@ -142,6 +143,11 @@
             if (data["type"] == "game_config") {
                 document.getElementById("active-game-ui").style.display = "flex";
                 document.getElementById("results-ui").style.display = "none";
+
+                scoreA.innerText = "0";
+                scoreB.innerText = "0";
+                // dont wanna move the const below
+                document.getElementById("user-input-game").value = "";
 
                 addition_left_min = parseInt(data["addition_left_min"], 10);
                 addition_left_max = parseInt(data["addition_left_max"], 10);
@@ -246,28 +252,7 @@
                 produceEquation();
             }
         });
-        
-
-        // play random noise ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        const audioFiles = [
-            "{% static 'sounds/birds-chirping.mp3' %}",
-            "{% static 'sounds/car-alarm.mp3' %}",
-            "{% static 'sounds/people-talking.mp3' %}",
-            "{% static 'sounds/heavy-rainfall.mp3' %}",
-            "{% static 'sounds/gunshots.mp3' %}",
-            "{% static 'sounds/wind.mp3' %}",
-        ];
-
-        window.onload = function playSound() {
-            setTimeout(function() {
-                const randomSoundIndex = Math.floor(Math.random() * audioFiles.length);
-                const selectedFile = audioFiles[randomSoundIndex];
-                
-                const audioPlayer = document.getElementById("audio-player");
-                audioPlayer.src = selectedFile;
-                audioPlayer.play();
-            }, 2000);
-        };
+    
 
     </script>
 
