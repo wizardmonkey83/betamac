@@ -175,6 +175,7 @@ input::-webkit-inner-spin-button {
 }
 .link.left {
     margin-right: 1rem;
+    cursor: pointer;
 }
 
 

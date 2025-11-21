@@ -52,6 +52,9 @@
         
         
         // countdown timer -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const audioPlayer = document.getElementById("audio-player");
+        let runSound = true;
+        
         let countdownRunStatus = true;
         const countdownDisplay = document.getElementById("countdown");
         if (countdownRunStatus) {
@@ -63,6 +66,11 @@
                     countdownTime--;
                 }  else if (countdownTime < 0) {
                     countdownRunStatus = false;
+
+                    runSound = false;
+                    if (audioPlayer) {
+                        audioPlayer.pause();
+                    }
                     countdownDisplay.click();
                     clearInterval(countdownInterval);
                 }
@@ -149,15 +157,17 @@
             "{% static 'sounds/gunshots.mp3' %}",
             "{% static 'sounds/wind.mp3' %}",
         ];
+        
 
         window.onload = function playSound() {
             setTimeout(function() {
-                const randomSoundIndex = Math.floor(Math.random() * audioFiles.length);
-                const selectedFile = audioFiles[randomSoundIndex];
-                
-                const audioPlayer = document.getElementById("audio-player");
-                audioPlayer.src = selectedFile;
-                audioPlayer.play();
+                if (runSound) {
+                    const randomSoundIndex = Math.floor(Math.random() * audioFiles.length);
+                    const selectedFile = audioFiles[randomSoundIndex];
+                    
+                    audioPlayer.src = selectedFile;
+                    audioPlayer.play();
+                }
             }, 1000);
         };
 

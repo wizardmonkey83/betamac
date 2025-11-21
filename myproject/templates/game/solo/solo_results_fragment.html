@@ -3,11 +3,15 @@
         <div class="logo score">Score: <div id="final-score" class="header score"></div></div>
     </div>
     <div class="link-container">
-        <a class="link left" href="/game">Try Again</a>
+        <div class="link left" onclick="reloadSoloPage()">Try Again</div>
         <a class="link" href="/">Change Settings</a>
     </div>
 </div>
 <script>
     const finalScore = document.getElementById("final-score");
     finalScore.innerHTML = score;
+
+    function reloadSoloPage() {
+        location.reload();
+    }
 </script>
